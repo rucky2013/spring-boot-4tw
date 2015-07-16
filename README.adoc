@@ -1,0 +1,4 @@
+== Spring Boot For The Web
+
+This is the demo application used during the Spring Boot For The Web Tier talk at SpringOne.
+
