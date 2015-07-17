@@ -117,22 +117,6 @@
       "defaultValue": "/"
     },
     {
-      "name": "server.session-timeout",
-      "type": "java.lang.Integer",
-      "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties",
-      "deprecated": true,
-      "deprecation": {}
-    },
-    {
-      "name": "server.session-timeout",
-      "type": "java.lang.Integer",
-      "description": "Session timeout in seconds.",
-      "deprecated": true,
-      "deprecation": {
-        "replacement": "server.session.timeout"
-      }
-    },
-    {
       "name": "server.session.cookie.comment",
       "type": "java.lang.String",
       "description": "Comment for the session cookie.",

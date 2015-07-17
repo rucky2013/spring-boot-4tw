@@ -43,7 +43,7 @@ public class ConfigDiffGeneratorTest {
 		assertNotNull(undertowGroup.getLeft());
 		assertNotNull(undertowGroup.getRight());
 
-		assertEquals(6, diff.getGroupsDiffFor(ConfigDiffType.EQUALS).size());
+		assertEquals(5, diff.getGroupsDiffFor(ConfigDiffType.EQUALS).size());
 	}
 
 	@Test
@@ -58,13 +58,13 @@ public class ConfigDiffGeneratorTest {
 	}
 
 
-	protected ConfigDiffResult generateDiff(String left, String right) throws IOException {
+	public static ConfigDiffResult generateDiff(String left, String right) throws IOException {
 		ConfigurationMetadataRepository leftRepo = loadRepository(left);
 		ConfigurationMetadataRepository rightRepo = loadRepository(right);
 		return new ConfigDiffGenerator(null).processDiff(new ConfigDiffResult(left, right), leftRepo, rightRepo);
 	}
 
-	protected ConfigurationMetadataRepository loadRepository(String name) throws IOException {
+	private static ConfigurationMetadataRepository loadRepository(String name) throws IOException {
 		ClassPathResource classPathResource = new ClassPathResource("meta-data/" + name + ".json");
 		try (InputStream in = classPathResource.getInputStream()) {
 			return ConfigurationMetadataRepositoryJsonBuilder.create().withJsonResource(in).build();
