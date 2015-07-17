@@ -19,8 +19,8 @@ package demo.config.diff.support;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
@@ -60,9 +60,10 @@ public class ConfigurationMetadataRepositoryLoader {
 		try {
 			ArtifactResult artifactResult = dependencyResolver.resolveDependency(coordinates);
 			File file = artifactResult.getArtifact().getFile();
-			InputStream stream = new URLClassLoader(new URL[] {file.toURI().toURL()})
-					.getResourceAsStream("META-INF/spring-configuration-metadata.json");
-			if (stream != null) {
+			JarFile jarFile = new JarFile(file);
+			ZipEntry entry = jarFile.getEntry("META-INF/spring-configuration-metadata.json");
+			if (entry != null) {
+				InputStream stream = jarFile.getInputStream(entry);
 				try {
 					logger.info("Adding meta-data from '" + coordinates + "'");
 					builder.withJsonResource(stream);
