@@ -1,5 +1,7 @@
 package demo.config.diff;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,6 +48,14 @@ public class ConfigGroupDiff {
 			return Collections.emptyList();
 		}
 		return content;
+	}
+
+	public Collection<ConfigPropertyDiff> getAllProperties() {
+		Collection<ConfigPropertyDiff> result = new ArrayList<>();
+		for (List<ConfigPropertyDiff> propertyDiffs : this.properties.values()) {
+			result.addAll(propertyDiffs);
+		}
+		return result;
 	}
 
 	void register(ConfigDiffType diffType, ConfigPropertyDiff propertyDiff) {
