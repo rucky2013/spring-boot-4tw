@@ -19,8 +19,6 @@ package demo.config.diff;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.boot.configurationmetadata.ConfigurationMetadataGroup;
-import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -35,11 +33,8 @@ public class ConfigDiffResult {
 
 	private final String rightVersion;
 
-	private final MultiValueMap<ConfigDiffType, ConfigDiffEntry<ConfigurationMetadataGroup>> groups =
-			new LinkedMultiValueMap<ConfigDiffType, ConfigDiffEntry<ConfigurationMetadataGroup>>();
-
-	private final MultiValueMap<ConfigDiffType, ConfigDiffEntry<ConfigurationMetadataProperty>> properties =
-			new LinkedMultiValueMap<ConfigDiffType, ConfigDiffEntry<ConfigurationMetadataProperty>>();
+	private final MultiValueMap<ConfigDiffType, ConfigGroupDiff> groups =
+			new LinkedMultiValueMap<ConfigDiffType, ConfigGroupDiff>();
 
 	public ConfigDiffResult(String leftVersion, String rightVersion) {
 		this.leftVersion = leftVersion;
@@ -54,28 +49,16 @@ public class ConfigDiffResult {
 		return rightVersion;
 	}
 
-	public List<ConfigDiffEntry<ConfigurationMetadataGroup>> getGroupsDiffFor(ConfigDiffType type) {
-		List<ConfigDiffEntry<ConfigurationMetadataGroup>> content = this.groups.get(type);
+	public List<ConfigGroupDiff> getGroupsDiffFor(ConfigDiffType type) {
+		List<ConfigGroupDiff> content = this.groups.get(type);
 		if (content == null) {
 			return Collections.emptyList();
 		}
 		return content;
 	}
 
-	public List<ConfigDiffEntry<ConfigurationMetadataProperty>> getPropertiesDiffFor(ConfigDiffType type) {
-		List<ConfigDiffEntry<ConfigurationMetadataProperty>> content = this.properties.get(type);
-		if (content == null) {
-			return Collections.emptyList();
-		}
-		return content;
-	}
-
-	void register(ConfigDiffType type, ConfigurationMetadataGroup left, ConfigurationMetadataGroup right) {
-		this.groups.add(type, new ConfigDiffEntry<ConfigurationMetadataGroup>(left, right));
-	}
-
-	void register(ConfigDiffType type, ConfigurationMetadataProperty left, ConfigurationMetadataProperty right) {
-		this.properties.add(type, new ConfigDiffEntry<ConfigurationMetadataProperty>(left, right));
+	void register(ConfigDiffType diffType, ConfigGroupDiff groupDiff) {
+		this.groups.add(diffType, groupDiff);
 	}
 
 }

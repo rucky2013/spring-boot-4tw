@@ -45,7 +45,12 @@ public class ConfigDiffGenerator {
 		ConfigurationMetadataRepository right = loader.load(rightVersion);
 
 		ConfigDiffResult result = new ConfigDiffResult(leftVersion, rightVersion);
-		diffGroup(result, left, right).diffItem(result, left, right);
+		return processDiff(result, left, right);
+	}
+
+	protected ConfigDiffResult processDiff(ConfigDiffResult result,
+			ConfigurationMetadataRepository left, ConfigurationMetadataRepository right) {
+		diffGroup(result, left, right);
 		return result;
 	}
 
@@ -58,45 +63,58 @@ public class ConfigDiffGenerator {
 			String id = leftGroup.getId();
 			ConfigurationMetadataGroup rightGroup = rightGroups.get(id);
 			if (rightGroup == null) {
-				result.register(ConfigDiffType.DELETE, leftGroup, null);
+				ConfigGroupDiff groupDiff = new ConfigGroupDiff(id, leftGroup, null);
+				for (ConfigurationMetadataProperty property : leftGroup.getProperties().values()) {
+					groupDiff.register(ConfigDiffType.DELETE,
+							new ConfigPropertyDiff(property.getId(), property, null));
+				}
+				result.register(ConfigDiffType.DELETE, groupDiff);
 			}
 			else {
 				matches.add(id);
 				ConfigDiffType diffType = (equals(leftGroup, rightGroup) ? ConfigDiffType.EQUALS : ConfigDiffType.MODIFY);
-				result.register(diffType, leftGroup, rightGroup);
+				result.register(diffType, generateGroupDiff(leftGroup, rightGroup));
 			}
 		}
 		for (ConfigurationMetadataGroup rightGroup : rightGroups.values()) {
 			if (!matches.contains(rightGroup.getId())) {
-				result.register(ConfigDiffType.ADD, null, rightGroup);
+				ConfigGroupDiff groupDiff = new ConfigGroupDiff(rightGroup.getId(), null, rightGroup);
+				for (ConfigurationMetadataProperty property : rightGroup.getProperties().values()) {
+					groupDiff.register(ConfigDiffType.ADD,
+							new ConfigPropertyDiff(property.getId(), null, property));
+				}
+				result.register(ConfigDiffType.ADD, groupDiff);
 			}
 		}
 		return this;
 	}
 
-	protected ConfigDiffGenerator diffItem(ConfigDiffResult result,
-			ConfigurationMetadataRepository left, ConfigurationMetadataRepository right) {
+	protected ConfigGroupDiff generateGroupDiff(ConfigurationMetadataGroup left, ConfigurationMetadataGroup right) {
+		ConfigGroupDiff group = new ConfigGroupDiff(left.getId(), left, right);
 		List<String> matches = new ArrayList<String>();
-		Map<String, ConfigurationMetadataProperty> leftProperties = left.getAllProperties();
-		Map<String, ConfigurationMetadataProperty> rightProperties = right.getAllProperties();
+		Map<String, ConfigurationMetadataProperty> leftProperties = left.getProperties();
+		Map<String, ConfigurationMetadataProperty> rightProperties = right.getProperties();
 		for (ConfigurationMetadataProperty leftProperty : leftProperties.values()) {
 			String id = leftProperty.getId();
 			ConfigurationMetadataProperty rightProperty = rightProperties.get(id);
 			if (rightProperty == null) {
-				result.register(ConfigDiffType.DELETE, leftProperty, null);
+				group.register(ConfigDiffType.DELETE,
+						new ConfigPropertyDiff(leftProperty.getId(), leftProperty, null));
 			}
 			else {
 				matches.add(id);
 				ConfigDiffType diffType = (equals(leftProperty, rightProperty) ? ConfigDiffType.EQUALS : ConfigDiffType.MODIFY);
-				result.register(diffType, leftProperty, rightProperty);
+				group.register(diffType,
+						new ConfigPropertyDiff(leftProperty.getId(), leftProperty, rightProperty));
 			}
 		}
 		for (ConfigurationMetadataProperty rightProperty : rightProperties.values()) {
 			if (!matches.contains(rightProperty.getId())) {
-				result.register(ConfigDiffType.ADD, null, rightProperty);
+				group.register(ConfigDiffType.ADD,
+						new ConfigPropertyDiff(rightProperty.getId(), null, rightProperty));
 			}
 		}
-		return this;
+		return group;
 	}
 
 	private boolean equals(ConfigurationMetadataGroup left, ConfigurationMetadataGroup right) {
