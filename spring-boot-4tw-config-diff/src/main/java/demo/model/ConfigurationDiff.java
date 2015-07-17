@@ -1,7 +1,7 @@
 package demo.model;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -9,9 +9,9 @@ import java.util.Map;
  */
 public class ConfigurationDiff {
 
-	private final Map<String, ConfigurationGroupDiff> groups = new LinkedHashMap<>();
+	private final List<ConfigurationGroupDiff> groups = new LinkedList<>();
 
-	public Map<String, ConfigurationGroupDiff> getGroups() {
+	public List<ConfigurationGroupDiff> getGroups() {
 		return groups;
 	}
 

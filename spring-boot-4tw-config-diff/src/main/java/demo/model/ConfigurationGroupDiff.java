@@ -1,7 +1,7 @@
 package demo.model;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import demo.config.diff.ConfigDiffType;
 
@@ -15,7 +15,7 @@ public class ConfigurationGroupDiff {
 
 	private ConfigDiffType diffType;
 
-	private final Map<String, ConfigurationPropertyDiff> properties = new LinkedHashMap<>();
+	private final List<ConfigurationPropertyDiff> properties = new LinkedList<>();
 
 	public String getId() {
 		return id;
@@ -33,7 +33,7 @@ public class ConfigurationGroupDiff {
 		this.diffType = diffType;
 	}
 
-	public Map<String, ConfigurationPropertyDiff> getProperties() {
+	public List<ConfigurationPropertyDiff> getProperties() {
 		return properties;
 	}
 

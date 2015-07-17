@@ -43,10 +43,10 @@ public class ConfigurationDiffHandler {
 				propertyDiff.setDiffType(propertyIdToDiffType.get(propertyId));
 				propertyDiff.setLeft(originalProperty.getLeft());
 				propertyDiff.setRight(originalProperty.getRight());
-				groupDiff.getProperties().put(propertyId, propertyDiff);
+				groupDiff.getProperties().add(propertyDiff);
 			}
 
-			diff.getGroups().put(groupId, groupDiff);
+			diff.getGroups().add(groupDiff);
 		}
 
 		return diff;
