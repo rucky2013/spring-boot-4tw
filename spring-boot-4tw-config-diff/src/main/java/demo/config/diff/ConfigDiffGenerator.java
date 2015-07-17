@@ -40,7 +40,7 @@ public class ConfigDiffGenerator {
 		this.loader = new ConfigurationMetadataRepositoryLoader(dependencyResolver);
 	}
 
-	ConfigDiffResult generateDiff(String leftVersion, String rightVersion) throws IOException {
+	public ConfigDiffResult generateDiff(String leftVersion, String rightVersion) throws IOException {
 		ConfigurationMetadataRepository left = loader.load(leftVersion);
 		ConfigurationMetadataRepository right = loader.load(rightVersion);
 
