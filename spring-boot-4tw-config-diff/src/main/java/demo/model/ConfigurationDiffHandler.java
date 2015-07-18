@@ -27,6 +27,8 @@ public class ConfigurationDiffHandler {
 
 	public ConfigurationDiff handle(ConfigDiffResult original) {
 		ConfigurationDiff diff = new ConfigurationDiff();
+		diff.setLeftVersion(original.getLeftVersion());
+		diff.setRightVersion(original.getRightVersion());
 		Map<String,ConfigDiffType> groupIdToDiffType = mapGroupIdToDiffType(original);
 		Collection<ConfigGroupDiff> allGroups = sortGroups(original.getAllGroups());
 		for (ConfigGroupDiff originalGroup : allGroups) {
