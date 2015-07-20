@@ -9,8 +9,8 @@
     <tbody>
     {{#properties}}
     <tr class="{{#diffClass}}{{diffType}}{{/diffClass}}">
-        <td>{{#left}}<span title="{{shortDescription}}">{{name}}</span>{{/left}}</td>
-        <td>{{#right}}<span title="{{shortDescription}}">{{name}}</span>{{/right}}</td>
+        <td>{{#left}}<span title="{{#shortDescription}}{{.}}{{/shortDescription}}">{{name}}</span>{{/left}}</td>
+        <td>{{#right}}<span title="{{#shortDescription}}{{.}}{{/shortDescription}}">{{name}}</span>{{/right}}</td>
     </tr>
     {{/properties}}
     </tbody>
