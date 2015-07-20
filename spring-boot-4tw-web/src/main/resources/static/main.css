@@ -22,3 +22,11 @@ body {
     font-weight: 700;
     border-left: 3px solid #337ab7;
 }
+
+.version-form {
+    margin: 30px 0px;
+}
+
+.version-form input[type=text], .checkbox {
+    margin-right: 2em;
+}

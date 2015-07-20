@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.test.springone.boot4tw.diff.DiffMetadataService;
 
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -29,16 +31,16 @@ public class DiffMetadataController {
     }
 
     @RequestMapping("/")
-    public String diffMetadata(@RequestParam(required = false) String previousVersion,
-                               @RequestParam(required = false) String nextVersion,
+    public String diffMetadata(@RequestParam(required = false) String fromVersion,
+                               @RequestParam(required = false) String toVersion,
                                @RequestParam(defaultValue = "false") String full, Model model) {
 
-        previousVersion = "1.3.0.M1";
-        nextVersion = "1.3.0.BUILD-SNAPSHOT";
+        if(fromVersion == null || toVersion == null) {
+            fromVersion = "1.3.0.M1";
+            toVersion = "1.3.0.BUILD-SNAPSHOT";
+        }
 
-        ConfigurationDiff diff = metadataService.metadataDiff(previousVersion, nextVersion);
-
-
+        ConfigurationDiff diff = metadataService.metadataDiff(fromVersion, toVersion);
 
         model.addAttribute("previousVersion", diff.getLeftVersion());
         model.addAttribute("nextVersion", diff.getRightVersion());
@@ -78,6 +80,19 @@ public class DiffMetadataController {
         });
 
         return "diff";
+    }
+
+    @RequestMapping("/diff/{fromVersion}/{toVersion}")
+    @ResponseBody
+    public ConfigurationDiff diffMetadataApi(@PathParam("fromVersion") String fromVersion,
+                               @PathParam("toVersion") String toVersion,
+                               @RequestParam(defaultValue = "false") String full) {
+        if(fromVersion == null || toVersion == null) {
+            fromVersion = "1.3.0.M1";
+            toVersion = "1.3.0.BUILD-SNAPSHOT";
+        }
+
+        return metadataService.metadataDiff(fromVersion, toVersion);
     }
 
 }
