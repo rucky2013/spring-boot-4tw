@@ -1,9 +1,9 @@
 package demo.model;
 
+import demo.config.diff.ConfigDiffType;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import demo.config.diff.ConfigDiffType;
 
 /**
  *

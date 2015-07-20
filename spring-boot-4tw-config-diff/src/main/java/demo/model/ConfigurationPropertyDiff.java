@@ -1,7 +1,6 @@
 package demo.model;
 
 import demo.config.diff.ConfigDiffType;
-
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
 
 /**

@@ -1,0 +1,17 @@
+<table class="table table-hover table-metadata" id="{{#idfy}}{{id}}{{/idfy}}">
+    <caption>Group "{{id}}"</caption>
+    <thead>
+    <tr>
+        <th class="col-md-6">{{previousVersion}}</th>
+        <th class="col-md-6">{{nextVersion}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#properties}}
+    <tr class="{{#diffClass}}{{diffType}}{{/diffClass}}">
+        <td>{{#left}}<span title="{{shortDescription}}">{{name}}</span>{{/left}}</td>
+        <td>{{#right}}<span title="{{shortDescription}}">{{name}}</span>{{/right}}</td>
+    </tr>
+    {{/properties}}
+    </tbody>
+</table>

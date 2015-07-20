@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Spring Boot 4TW</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="{{#url}}/webjars/bootstrap/css/bootstrap.min.css{{/url}}" />
+    <link rel="stylesheet" type="text/css" href="{{#url}}/main.css{{/url}}" />
+    <script type="text/javascript" src="{{#url}}/webjars/jquery/jquery.min.js{{/url}}"></script>
+    <script type="text/javascript" src="{{#url}}/webjars/bootstrap/js/bootstrap.min.js{{/url}}"></script>
+</head>
+<body data-spy="scroll" data-target=".navbar-side">
+<div class="container">
+
+    <header>
+        <div class="page-header">
+            <h1>Spring Boot Metadata <small>diff generator</small></h1>
+        </div>
+        <div class="row">
+            <p>Comparing version {{previousVersion}} - {{nextVersion}}</p>
+        </div>
+    </header>
+
+    <div class="row">
+        <div class="col-md-9" role="main">
+        {{#diffs}}
+            {{>_difftable}}
+        {{/diffs}}
+        </div>
+        <div class="col-md-3" role="complementary">
+            <nav class="navbar-side" data-spy="affix" data-offset-top="10">
+                <ul class="nav">
+                    {{#diffs}}
+                    <li><a href="#{{#idfy}}{{id}}{{/idfy}}">{{id}}</a></li>
+                    {{/diffs}}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

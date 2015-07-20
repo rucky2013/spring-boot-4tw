@@ -1,0 +1,24 @@
+body {
+    position: relative;
+}
+.table-metadata {
+    word-break: break-all;
+}
+
+.navbar-side.affix {
+    top:10px;
+}
+
+.navbar-side> .nav> li> a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.navbar-side> .nav> .active> a {
+
+    font-weight: 700;
+    border-left: 3px solid #337ab7;
+}
