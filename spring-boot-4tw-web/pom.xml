@@ -11,10 +11,6 @@
     <artifactId>spring-boot-4tw-web</artifactId>
     <name>Spring Boot For The Web :: Web</name>
 
-    <properties>
-        <start-class>org.test.springone.boot4tw.Application</start-class>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.test.springone</groupId>
