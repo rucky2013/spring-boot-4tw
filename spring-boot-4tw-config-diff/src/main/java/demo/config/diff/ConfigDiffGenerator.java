@@ -37,7 +37,11 @@ public class ConfigDiffGenerator {
 	private final ConfigurationMetadataRepositoryLoader loader;
 
 	public ConfigDiffGenerator(AetherDependencyResolver dependencyResolver) {
-		this.loader = new ConfigurationMetadataRepositoryLoader(dependencyResolver);
+		this(new ConfigurationMetadataRepositoryLoader(dependencyResolver));
+	}
+
+	public ConfigDiffGenerator(ConfigurationMetadataRepositoryLoader loader) {
+		this.loader = loader;
 	}
 
 	public ConfigDiffResult generateDiff(String leftVersion, String rightVersion) throws IOException {

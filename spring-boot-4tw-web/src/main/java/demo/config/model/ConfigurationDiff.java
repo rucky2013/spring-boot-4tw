@@ -1,4 +1,4 @@
-package demo.model;
+package demo.config.model;
 
 import java.util.LinkedList;
 import java.util.List;

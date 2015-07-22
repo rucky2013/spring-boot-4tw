@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import demo.config.diff.support.AetherDependencyResolver;
 import org.junit.Test;
 
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepository;
@@ -61,7 +62,8 @@ public class ConfigDiffGeneratorTest {
 	public static ConfigDiffResult generateDiff(String left, String right) throws IOException {
 		ConfigurationMetadataRepository leftRepo = loadRepository(left);
 		ConfigurationMetadataRepository rightRepo = loadRepository(right);
-		return new ConfigDiffGenerator(null).processDiff(new ConfigDiffResult(left, right), leftRepo, rightRepo);
+		return new ConfigDiffGenerator((AetherDependencyResolver) null)
+				.processDiff(new ConfigDiffResult(left, right), leftRepo, rightRepo);
 	}
 
 	private static ConfigurationMetadataRepository loadRepository(String name) throws IOException {

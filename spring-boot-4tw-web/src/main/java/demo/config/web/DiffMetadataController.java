@@ -7,7 +7,7 @@ import javax.websocket.server.PathParam;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 import demo.config.service.DiffMetadataService;
-import demo.model.ConfigurationDiff;
+import demo.config.model.ConfigurationDiff;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

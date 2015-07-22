@@ -5,8 +5,8 @@ import java.io.IOException;
 import demo.config.diff.ConfigDiffGenerator;
 import demo.config.diff.ConfigDiffResult;
 import demo.config.diff.support.AetherDependencyResolver;
-import demo.model.ConfigurationDiff;
-import demo.model.ConfigurationDiffHandler;
+import demo.config.model.ConfigurationDiff;
+import demo.config.model.ConfigurationDiffHandler;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
