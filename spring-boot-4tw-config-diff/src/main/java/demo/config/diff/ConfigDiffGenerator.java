@@ -49,11 +49,6 @@ public class ConfigDiffGenerator {
 		ConfigurationMetadataRepository right = loader.load(rightVersion);
 
 		ConfigDiffResult result = new ConfigDiffResult(leftVersion, rightVersion);
-		return processDiff(result, left, right);
-	}
-
-	protected ConfigDiffResult processDiff(ConfigDiffResult result,
-			ConfigurationMetadataRepository left, ConfigurationMetadataRepository right) {
 		diffGroup(result, left, right);
 		return result;
 	}

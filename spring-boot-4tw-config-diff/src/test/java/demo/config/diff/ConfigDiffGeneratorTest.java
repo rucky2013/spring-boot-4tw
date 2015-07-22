@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import demo.config.diff.support.AetherDependencyResolver;
+import demo.config.diff.support.ConfigurationMetadataRepositoryLoader;
 import org.junit.Test;
 
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepository;
@@ -12,6 +12,8 @@ import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepos
 import org.springframework.core.io.ClassPathResource;
 
 import static org.junit.Assert.*;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.mock;
 
 /**
  *
@@ -62,8 +64,11 @@ public class ConfigDiffGeneratorTest {
 	public static ConfigDiffResult generateDiff(String left, String right) throws IOException {
 		ConfigurationMetadataRepository leftRepo = loadRepository(left);
 		ConfigurationMetadataRepository rightRepo = loadRepository(right);
-		return new ConfigDiffGenerator((AetherDependencyResolver) null)
-				.processDiff(new ConfigDiffResult(left, right), leftRepo, rightRepo);
+		ConfigurationMetadataRepositoryLoader resolver = mock(ConfigurationMetadataRepositoryLoader.class);
+		given(resolver.load(left)).willReturn(leftRepo);
+		given(resolver.load(right)).willReturn(rightRepo);
+
+		return new ConfigDiffGenerator(resolver).generateDiff(left, right);
 	}
 
 	private static ConfigurationMetadataRepository loadRepository(String name) throws IOException {
