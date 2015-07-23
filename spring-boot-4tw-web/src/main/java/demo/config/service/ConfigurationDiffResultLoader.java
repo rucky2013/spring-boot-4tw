@@ -22,9 +22,13 @@ class ConfigurationDiffResultLoader {
 
 	private final VersionStringComparator versionComparator;
 
-	public ConfigurationDiffResultLoader() {
-		this.diffGenerator = new ConfigDiffGenerator(AetherDependencyResolver.withAllRepositories());
+	public ConfigurationDiffResultLoader(ConfigDiffGenerator diffGenerator) {
+		this.diffGenerator = diffGenerator;
 		this.versionComparator = new VersionStringComparator();
+	}
+
+	public ConfigurationDiffResultLoader() {
+		this(new ConfigDiffGenerator(AetherDependencyResolver.withAllRepositories()));
 	}
 
 	/**
