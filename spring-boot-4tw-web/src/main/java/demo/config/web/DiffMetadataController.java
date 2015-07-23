@@ -1,8 +1,12 @@
 package demo.config.web;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.websocket.server.PathParam;
 
+import demo.config.diff.ConfigDiffType;
 import demo.config.model.ConfigurationDiff;
+import demo.config.model.ConfigurationGroupDiff;
 import demo.config.service.DiffMetadataService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +29,7 @@ public class DiffMetadataController {
 	@RequestMapping("/")
 	public String diffMetadata(@RequestParam(required = false) String fromVersion,
 			@RequestParam(required = false) String toVersion,
-			@RequestParam(defaultValue = "false") String full, Model model) {
+			@RequestParam(defaultValue = "false") boolean full, Model model) {
 
 		if (fromVersion == null || toVersion == null) {
 			fromVersion = "1.3.0.M1";
@@ -36,7 +40,9 @@ public class DiffMetadataController {
 
 		model.addAttribute("previousVersion", diff.getLeftVersion());
 		model.addAttribute("nextVersion", diff.getRightVersion());
-		model.addAttribute("diffs", diff.getGroups());
+		List<ConfigurationGroupDiff> groups = diff.getGroups().stream()
+				.filter(g -> full || g.getDiffType() != ConfigDiffType.EQUALS).collect(Collectors.toList());
+		model.addAttribute("diffs", groups);
 
 		return "diff";
 	}
