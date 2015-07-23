@@ -1,13 +1,10 @@
 package demo.config.web;
 
-import java.io.IOException;
-import java.io.Writer;
 import javax.websocket.server.PathParam;
 
 import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
-import demo.config.service.DiffMetadataService;
 import demo.config.model.ConfigurationDiff;
+import demo.config.service.DiffMetadataService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +18,12 @@ import org.springframework.web.servlet.resource.ResourceUrlProvider;
 public class DiffMetadataController {
 
 	private final DiffMetadataService metadataService;
+	private final ResourceUrlProvider resourceUrlProvider;
 
 	@Autowired
-	private ResourceUrlProvider resourceUrlProvider;
-
-	@Autowired
-	public DiffMetadataController(DiffMetadataService metadataService) {
+	public DiffMetadataController(DiffMetadataService metadataService, ResourceUrlProvider resourceUrlProvider) {
 		this.metadataService = metadataService;
+		this.resourceUrlProvider = resourceUrlProvider;
 	}
 
 	@RequestMapping("/")
@@ -47,35 +43,28 @@ public class DiffMetadataController {
 		model.addAttribute("diffs", diff.getGroups());
 
         /* Add those Lambdas at the application/ViewResolver level? */
-		model.addAttribute("diffClass", new Mustache.Lambda() {
-			public void execute(Template.Fragment frag, Writer out) throws IOException {
-				switch (frag.execute()) {
-					case "ADD":
-						out.write("success");
-						break;
-					case "DELETE":
-						out.write("danger");
-						break;
-				}
+		model.addAttribute("diffClass", (Mustache.Lambda) (frag, out) -> {
+			switch (frag.execute()) {
+				case "ADD":
+					out.write("success");
+					break;
+				case "DELETE":
+					out.write("danger");
+					break;
 			}
 		});
 
-		model.addAttribute("idfy", new Mustache.Lambda() {
-			public void execute(Template.Fragment frag, Writer out) throws IOException {
-				out.write(frag.execute().replaceAll("\\.", "-"));
-			}
-		});
+		model.addAttribute("idfy", (Mustache.Lambda) (frag, out) ->
+				out.write(frag.execute().replaceAll("\\.", "-")));
 
-		model.addAttribute("url", new Mustache.Lambda() {
-			public void execute(Template.Fragment frag, Writer out) throws IOException {
-				String url = frag.execute();
-				String resourceUrl = resourceUrlProvider.getForLookupPath(url);
-				if (resourceUrl != null) {
-					out.write(resourceUrl);
-				}
-				else {
-					out.write(url);
-				}
+		model.addAttribute("url", (Mustache.Lambda) (frag, out) -> {
+			String url = frag.execute();
+			String resourceUrl = resourceUrlProvider.getForLookupPath(url);
+			if (resourceUrl != null) {
+				out.write(resourceUrl);
+			}
+			else {
+				out.write(url);
 			}
 		});
 
