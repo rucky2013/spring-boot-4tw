@@ -64,14 +64,14 @@ public class AetherDependencyResolver {
 
 	private final List<RemoteRepository> repositories;
 
-	public AetherDependencyResolver(RemoteRepository... remoteRepositories) throws Exception {
+	public AetherDependencyResolver(RemoteRepository... remoteRepositories) {
 		ServiceLocator serviceLocator = createServiceLocator();
 		this.repositorySystem = createRepositorySystem(serviceLocator);
 		this.session = createRepositorySystemSession(this.repositorySystem);
 		this.repositories = Arrays.asList(remoteRepositories);
 	}
 
-	public static AetherDependencyResolver withAllRepositories() throws Exception {
+	public static AetherDependencyResolver withAllRepositories() {
 		return new AetherDependencyResolver(SPRING_IO_RELEASE, SPRING_IO_MILESTONE, SPRING_IO_SNAPSHOT);
 	}
 
@@ -82,11 +82,11 @@ public class AetherDependencyResolver {
 		return this.repositorySystem.resolveArtifact(session, request);
 	}
 
-	private static RepositorySystem createRepositorySystem(ServiceLocator serviceLocator) throws Exception {
+	private static RepositorySystem createRepositorySystem(ServiceLocator serviceLocator) {
 		return serviceLocator.getService(RepositorySystem.class);
 	}
 
-	private static RepositorySystemSession createRepositorySystemSession(RepositorySystem repositorySystem) throws Exception {
+	private static RepositorySystemSession createRepositorySystemSession(RepositorySystem repositorySystem) {
 		DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
 		LocalRepository localRepository = new LocalRepository(getM2RepoDirectory());
