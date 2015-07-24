@@ -1,27 +1,42 @@
 package demo.config.springboot;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class SpringBootVersionService {
 
-    private final static String BOOT_VERSION_ENDPOINT = "https://spring.io/project_metadata/spring-boot.json";
+	static final String BOOT_VERSION_ENDPOINT = "https://spring.io/project_metadata/spring-boot.json";
 
-    private final RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
 
-    public SpringBootVersionService() {
-        this.restTemplate = new RestTemplate();
-    }
+	SpringBootVersionService(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
 
-    public List<String> fetchBootVersions() {
+	public SpringBootVersionService() {
+		this(new RestTemplate());
+	}
 
-        Map<String, String> response = restTemplate.getForObject(BOOT_VERSION_ENDPOINT, Map.class);
-
-        return Collections.emptyList();
-    }
+	public List<String> fetchBootVersions() {
+		String content = restTemplate.getForObject(BOOT_VERSION_ENDPOINT, String.class);
+		JSONObject json = new JSONObject(content);
+		List<String> versions = new ArrayList<>();
+		if (json.has("projectReleases")) {
+			JSONArray projectReleases = json.getJSONArray("projectReleases");
+			for (int i = 0; i < projectReleases.length(); i++) {
+				JSONObject projectRelease = projectReleases.getJSONObject(i);
+				if (projectRelease.has("version")) {
+					versions.add(projectRelease.getString("version"));
+				}
+			}
+		}
+		return versions;
+	}
 }
