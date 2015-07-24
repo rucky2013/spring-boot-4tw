@@ -34,20 +34,6 @@ class MustacheCustomizer {
 	public void customizeViewResolver() {
 		Map<String, Object> attributesMap = new HashMap<>();
 
-		attributesMap.put("diffClass", (Mustache.Lambda) (frag, out) -> {
-			switch (frag.execute()) {
-				case "ADD":
-					out.write("success");
-					break;
-				case "DELETE":
-					out.write("danger");
-					break;
-			}
-		});
-
-		attributesMap.put("idfy", (Mustache.Lambda) (frag, out) ->
-				out.write(frag.execute().replaceAll("\\.", "-")));
-
 		attributesMap.put("url", (Mustache.Lambda) (frag, out) -> {
 			String url = frag.execute();
 			String resourceUrl = resourceUrlProvider.getForLookupPath(url);

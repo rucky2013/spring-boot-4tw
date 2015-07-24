@@ -16,10 +16,7 @@
 
     <header>
         <div class="page-header">
-            <h1>Spring Boot Metadata <small>diff generator</small></h1>
-        </div>
-        <div class="row">
-            <p>Comparing version {{previousVersion}} - {{nextVersion}}</p>
+            <h1><a href="/">Spring Boot Metadata</a> <small>diff generator</small></h1>
         </div>
     </header>
 
@@ -29,16 +26,16 @@
                 <div class="form-group">
                     <label class="sr-only" for="fromVersion">From version</label>
                     <input type="text" size="30" class="form-control" id="fromVersion"
-                           name="fromVersion" placeholder="from Version" value="1.3.0.M1">
+                           name="fromVersion" placeholder="from Version" value="{{previousVersion}}">
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="toVersion">To version</label>
                     <input type="text" size="30" class="form-control" id="toVersion"
-                           name="toVersion" placeholder="to Version" value="1.3.0.BUILD-SNAPSHOT">
+                           name="toVersion" placeholder="to Version" value="{{nextVersion}}">
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="full"> Show All
+                        <input type="checkbox" name="full" {{#full}}checked{{/full}}> Show All
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary">Compare</button>
@@ -53,7 +50,7 @@
             <nav class="navbar-side" data-spy="affix" data-offset-top="10">
                 <ul class="nav">
                     {{#diffs}}
-                    <li><a href="#{{#idfy}}{{id}}{{/idfy}}">{{id}}</a></li>
+                    <li><a href="#{{anchorName}}">{{id}}</a></li>
                     {{/diffs}}
                 </ul>
             </nav>

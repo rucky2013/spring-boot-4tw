@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class VersionStringComparator implements Comparator<String> {
+class VersionStringComparator implements Comparator<String> {
 
 	private static final List<String> QUALIFIERS = Arrays.asList("M", "RC", "BUILD-SNAPSHOT", "RELEASE");
 

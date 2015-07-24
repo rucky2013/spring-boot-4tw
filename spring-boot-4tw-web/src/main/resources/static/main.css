@@ -30,3 +30,7 @@ body {
 .version-form input[type=text], .checkbox {
     margin-right: 2em;
 }
+
+.deprecated {
+    text-decoration: line-through
+}

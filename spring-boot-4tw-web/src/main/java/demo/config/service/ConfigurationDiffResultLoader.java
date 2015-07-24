@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
  * @author Stephane Nicoll
  */
 @Service
-class ConfigurationDiffResultLoader {
+public class ConfigurationDiffResultLoader {
 
 	private final ConfigDiffGenerator diffGenerator;
 
