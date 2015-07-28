@@ -1,0 +1,17 @@
+spring:
+  resources:
+    cache-period: 3600
+    chain:
+      enabled: true
+      strategy:
+        content:
+         enabled: true
+
+---
+
+spring:
+  profiles: development
+  resources:
+    static-locations: classpath:/META-INF/resources/, classpath:/static/, classpath:/public/, file://${user.dir}/spring-boot-4tw-client/src/, file://${user.dir}/spring-boot-4tw-client/node_modules/
+    cache-period: 0
+

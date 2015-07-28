@@ -1,13 +1,14 @@
 package demo.config.model;
 
-import java.io.IOException;
-import java.util.List;
-
 import demo.config.diff.ConfigDiffResult;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.util.List;
+
 import static demo.config.test.ConfigDiffResultTestLoader.*;
-import static org.junit.Assert.*;
+import static demo.config.test.ConfigDiffResultTestLoader.generateDiff;
+import static org.junit.Assert.assertEquals;
 
 /**
  *

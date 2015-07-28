@@ -8,45 +8,29 @@
 		<artifactId>spring-boot-4tw</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>spring-boot-4tw-web</artifactId>
-	<name>Spring Boot For The Web :: Web</name>
+	<artifactId>spring-boot-4tw-webjs</artifactId>
+	<name>Spring Boot For The Web :: Web JS</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.test.springone</groupId>
 			<artifactId>spring-boot-4tw-config-diff</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.test.springone</groupId>
+            <artifactId>spring-boot-4tw-client</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.samskivert</groupId>
-			<artifactId>jmustache</artifactId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-locator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>jquery</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
 		</dependency>
 
 		<dependency>

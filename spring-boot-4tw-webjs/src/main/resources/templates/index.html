@@ -1,22 +1,22 @@
 <!doctype html>
-<html lang="en" ng-app="diffApp">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" ng-app="diffApp">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Spring Boot 4TW :: Angular.js</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
     <base href="/" />
-    <link rel="stylesheet" type="text/css" href="{{#url}}/bootstrap/dist/css/bootstrap.min.css{{/url}}" />
-    <link rel="stylesheet" type="text/css" href="{{#url}}/main.css{{/url}}" />
-    <script type="text/javascript" src="{{#url}}/angular/angular.min.js{{/url}}"></script>
-    <script type="text/javascript" src="{{#url}}/angular-route/angular-route.min.js{{/url}}"></script>
-    <script type="text/javascript" src="{{#url}}/jquery/dist/jquery.min.js{{/url}}"></script>
-    <script type="text/javascript" src="{{#url}}/bootstrap/dist/js/bootstrap.min.js{{/url}}"></script>
-    <script type="text/javascript" src="{{#url}}/app.js{{/url}}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/dist/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+    <script type="text/javascript" th:src="@{/angular/angular.min.js}"></script>
+    <script type="text/javascript" th:src="@{/angular-route/angular-route.min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery/dist/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
 </head>
 <body>
-    <div class="container" ng-view>
+    <div class="container" ng-view="">
 
     </div>
 
@@ -33,16 +33,16 @@
                     <div class="form-group">
                         <label class="sr-only" for="fromVersion">From version</label>
                         <input type="text" size="30" class="form-control" id="fromVersion"
-                               name="fromVersion" placeholder="from Version" ng-model="fromVersion">
+                               name="fromVersion" placeholder="from Version" ng-model="fromVersion" />
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="toVersion">To version</label>
                         <input type="text" size="30" class="form-control" id="toVersion"
-                               name="toVersion" placeholder="to Version" ng-model="toVersion">
+                               name="toVersion" placeholder="to Version" ng-model="toVersion" />
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="full" ng-model="full"> Show All
+                            <input type="checkbox" name="full" ng-model="full" /> Show All
                         </label>
                     </div>
                     <button type="submit" class="btn btn-primary">Compare</button>
