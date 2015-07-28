@@ -5,6 +5,9 @@ import demo.config.diff.ConfigDiffType;
 import demo.config.diffview.ConfigDiff;
 import demo.config.diffview.DiffViewConverter;
 import demo.config.diffview.GroupDiff;
+import demo.config.model.ConfigurationDiff;
+import demo.config.model.ConfigurationDiffHandler;
+import demo.config.model.ConfigurationGroupDiff;
 import demo.config.service.ConfigurationDiffResultLoader;
 import demo.config.springboot.SpringBootVersionService;
 import demo.config.validation.Version;
@@ -12,13 +15,9 @@ import demo.config.validation.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,15 +30,18 @@ public class DiffMetadataController {
 
 	private final SpringBootVersionService versionService;
 
+	private final ConfigurationDiffHandler handler;
+
 	@Autowired
 	public DiffMetadataController(ConfigurationDiffResultLoader resultLoader,
 	                              DiffViewConverter converter, SpringBootVersionService versionService) {
 		this.resultLoader = resultLoader;
 		this.converter = converter;
 		this.versionService = versionService;
+		this.handler = new ConfigurationDiffHandler();
 	}
 
-	@RequestMapping("/")
+	@RequestMapping("/server")
 	public String diffMetadata(@Valid @ModelAttribute DiffRequest diffRequest,
 			@RequestParam(defaultValue = "false") boolean full, Model model) {
 
@@ -62,17 +64,17 @@ public class DiffMetadataController {
 		return "diff";
 	}
 
-	@RequestMapping("/diff/{fromVersion}/{toVersion}")
+	@RequestMapping("/diff/{fromVersion}/{toVersion}/")
 	@ResponseBody
-	public ConfigDiffResult diffMetadataApi(@PathParam("fromVersion") String fromVersion,
-			@PathParam("toVersion") String toVersion,
-			@RequestParam(defaultValue = "false") String full) {
-		if (fromVersion == null || toVersion == null) {
-			fromVersion = "1.3.0.M1";
-			toVersion = "1.3.0.BUILD-SNAPSHOT";
-		}
+	public List<ConfigurationGroupDiff> diffMetadataApi(@PathVariable("fromVersion") String fromVersion,
+	                                                    @PathVariable("toVersion") String toVersion,
+	                                                    @RequestParam(defaultValue = "false") String full) {
 
-		return resultLoader.load(fromVersion, toVersion);
+		ConfigDiffResult result = resultLoader.load(fromVersion, toVersion);
+		ConfigurationDiff configurationDiff = handler.handle(result);
+
+		return configurationDiff.getGroups().stream()
+				.filter(g -> "true".equals(full) || g.getDiffType() != ConfigDiffType.EQUALS).collect(Collectors.toList());
 	}
 
 	static class DiffRequest {

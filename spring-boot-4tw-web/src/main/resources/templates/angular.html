@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" ng-app="diffApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Spring Boot 4TW :: Angular.js</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <base href="/" />
+    <link rel="stylesheet" type="text/css" href="{{#url}}/bootstrap/dist/css/bootstrap.min.css{{/url}}" />
+    <link rel="stylesheet" type="text/css" href="{{#url}}/main.css{{/url}}" />
+    <script type="text/javascript" src="{{#url}}/angular/angular.min.js{{/url}}"></script>
+    <script type="text/javascript" src="{{#url}}/angular-route/angular-route.min.js{{/url}}"></script>
+    <script type="text/javascript" src="{{#url}}/jquery/dist/jquery.min.js{{/url}}"></script>
+    <script type="text/javascript" src="{{#url}}/bootstrap/dist/js/bootstrap.min.js{{/url}}"></script>
+    <script type="text/javascript" src="{{#url}}/app.js{{/url}}"></script>
+</head>
+<body>
+    <div class="container" ng-view>
+
+    </div>
+
+    <script type='text/ng-template' id='diffListTemplate'>
+        <header>
+            <div class="page-header">
+                <h1><a ng-href="/">Spring Boot Metadata</a> <small>diff generator</small></h1>
+            </div>
+        </header>
+
+        <div class="row">
+            <div class="col-md-9">
+                <form class="form-inline version-form" ng-submit="compare(fromVersion, toVersion)" id="compare">
+                    <div class="form-group">
+                        <label class="sr-only" for="fromVersion">From version</label>
+                        <input type="text" size="30" class="form-control" id="fromVersion"
+                               name="fromVersion" placeholder="from Version" ng-model="fromVersion">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="toVersion">To version</label>
+                        <input type="text" size="30" class="form-control" id="toVersion"
+                               name="toVersion" placeholder="to Version" ng-model="toVersion">
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="full" ng-model="full"> Show All
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Compare</button>
+                </form>
+            </div>
+            <div class="col-md-9" role="main">
+                <table ng-repeat="group in diffs" class="table table-hover table-metadata" id="[[group.id | anchor]]">
+                    <caption>Group "[[group.id]]"</caption>
+                    <thead>
+                    <tr>
+                        <th class="col-md-6">[[fromVersion]]</th>
+                        <th class="col-md-6">[[toVersion]]</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="prop in group.properties" class="[[prop | cssDiffClass]]">
+                        <td>
+                            <span ng-if="prop.left.deprecated" class="deprecated"
+                                  title="[[prop.right.deprecation.reason]] See: [[prop.right.deprecation.replacement]]">[[prop.left.name]]</span>
+                            <span ng-if="!prop.left.deprecation"
+                                  title="[[prop.left.description]]">[[prop.left.name]]</span>
+                        </td>
+                        <td>
+                            <span ng-if="prop.right.deprecated" class="deprecated"
+                                  title="[[prop.right.deprecation.reason]] See: [[prop.right.deprecation.replacement]]">[[prop.right.name]]</span>
+                            <span ng-if="!prop.right.deprecated"
+                                  title="[[prop.right.description]]">[[prop.right.name]]</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3" role="complementary">
+                <nav class="navbar-side" data-spy="affix" data-offset-top="10">
+                    <ul class="nav">
+                        <li ng-repeat="group in diffs"><a ng-click="gotoAnchor($event, group)" href="#[[group.id | anchor]]">[[group.id]]</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </script>
+
+</body>
+</html>

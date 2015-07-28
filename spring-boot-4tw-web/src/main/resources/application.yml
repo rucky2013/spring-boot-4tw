@@ -1,4 +1,21 @@
+project:
+  root: file:///Users/bclozel/workspace/springone2gx/spring-boot-4tw/
+
 spring:
+  resources:
+    static-locations: classpath:/META-INF/resources/, classpath:/static/, classpath:/public/, ${project.root}/spring-boot-4tw-client/src/, ${project.root}/spring-boot-4tw-client/node_modules/
+    cache-period: 0
+    chain:
+      enabled: true
+      strategy:
+        content:
+         enabled: true
+         paths: /bootstrap/**, /angular/**, /jquery/**
+
+---
+
+spring:
+  profiles: production
   resources:
     chain:
       enabled: true
