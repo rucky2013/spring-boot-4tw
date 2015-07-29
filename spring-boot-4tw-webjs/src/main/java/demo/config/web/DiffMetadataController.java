@@ -13,11 +13,11 @@ import demo.config.service.ConfigurationDiffResultLoader;
 import demo.config.validation.Version;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class DiffMetadataController {
@@ -33,15 +33,20 @@ public class DiffMetadataController {
 	}
 
 	@RequestMapping("/diff/{fromVersion}/{toVersion}/")
-	@ResponseBody
-	public List<ConfigurationGroupDiff> diffMetadata(@Valid @ModelAttribute DiffRequest diffRequest,
+	public ResponseEntity<List<ConfigurationGroupDiff>> diffMetadata(@Valid @ModelAttribute DiffRequest diffRequest,
 			@RequestParam(defaultValue = "false") String full) {
 
 		ConfigDiffResult result = resultLoader.load(diffRequest.fromVersion, diffRequest.toVersion);
 		ConfigurationDiff configurationDiff = handler.handle(result);
 
-		return configurationDiff.getGroups().stream()
+
+		List<ConfigurationGroupDiff> content = configurationDiff.getGroups().stream()
 				.filter(g -> "true".equals(full) || g.getDiffType() != ConfigDiffType.EQUALS).collect(Collectors.toList());
+		return ResponseEntity.ok().eTag(createDiffETag(configurationDiff)).body(content);
+	}
+
+	private String createDiffETag(ConfigurationDiff diff) {
+		return "\"" + diff.getLeftVersion() + "#" + diff.getRightVersion() + "\"";
 	}
 
 

@@ -1,16 +1,18 @@
 package demo.config.test;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import demo.config.diff.ConfigDiffGenerator;
 import demo.config.diff.ConfigDiffResult;
 import demo.config.diff.support.ConfigurationMetadataRepositoryLoader;
+
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepository;
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepositoryJsonBuilder;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -30,6 +32,7 @@ public class ConfigDiffResultTestLoader {
 		ConfigurationMetadataRepositoryLoader resolver = mock(ConfigurationMetadataRepositoryLoader.class);
 		given(resolver.load(left)).willReturn(leftRepo);
 		given(resolver.load(right)).willReturn(rightRepo);
+		given(resolver.resolveSnapshotVersion(anyString())).will(invocation -> invocation.getArguments()[0]);
 		return new ConfigDiffGenerator(resolver);
 	}
 
