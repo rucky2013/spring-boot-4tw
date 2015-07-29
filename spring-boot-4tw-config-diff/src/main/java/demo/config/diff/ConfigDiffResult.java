@@ -16,6 +16,7 @@
 
 package demo.config.diff;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,8 +29,8 @@ import org.springframework.util.MultiValueMap;
  *
  * @author Stephane Nicoll
  */
-public class ConfigDiffResult {
-
+@SuppressWarnings("serial")
+public class ConfigDiffResult implements Serializable {
 
 	private final String leftVersion;
 

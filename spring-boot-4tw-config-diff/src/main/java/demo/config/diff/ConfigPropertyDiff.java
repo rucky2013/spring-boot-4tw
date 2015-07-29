@@ -1,12 +1,15 @@
 package demo.config.diff;
 
+import java.io.Serializable;
+
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
 
 /**
  *
  * @author Stephane Nicoll
  */
-public class ConfigPropertyDiff {
+@SuppressWarnings("serial")
+public class ConfigPropertyDiff implements Serializable {
 
 	private final String id;
 
