@@ -32,7 +32,7 @@ public class ConfigDiffResultTestLoader {
 		ConfigurationMetadataRepositoryLoader resolver = mock(ConfigurationMetadataRepositoryLoader.class);
 		given(resolver.load(left)).willReturn(leftRepo);
 		given(resolver.load(right)).willReturn(rightRepo);
-		given(resolver.resolveSnapshotVersion(anyString())).will(invocation -> invocation.getArguments()[0]);
+		given(resolver.resolveVersion(anyString())).will(invocation -> invocation.getArguments()[0]);
 		return new ConfigDiffGenerator(resolver);
 	}
 

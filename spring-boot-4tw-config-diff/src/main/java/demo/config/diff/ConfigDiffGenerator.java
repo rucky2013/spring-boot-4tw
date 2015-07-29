@@ -48,8 +48,8 @@ public class ConfigDiffGenerator {
 		ConfigurationMetadataRepository left = loader.load(leftVersion);
 		ConfigurationMetadataRepository right = loader.load(rightVersion);
 
-		ConfigDiffResult result = new ConfigDiffResult(loader.resolveSnapshotVersion(leftVersion),
-				loader.resolveSnapshotVersion(rightVersion));
+		ConfigDiffResult result = new ConfigDiffResult(loader.resolveVersion(leftVersion),
+				loader.resolveVersion(rightVersion));
 		diffGroup(result, left, right);
 		return result;
 	}

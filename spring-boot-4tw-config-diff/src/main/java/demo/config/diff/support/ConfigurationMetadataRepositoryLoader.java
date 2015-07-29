@@ -57,7 +57,7 @@ public class ConfigurationMetadataRepositoryLoader {
 		return builder.build();
 	}
 
-	public String resolveSnapshotVersion(String version) {
+	public String resolveVersion(String version) {
 		try {
 			VersionResult versionResult = dependencyResolver
 					.resolveVersion("org.springframework.boot:spring-boot:" + version);
