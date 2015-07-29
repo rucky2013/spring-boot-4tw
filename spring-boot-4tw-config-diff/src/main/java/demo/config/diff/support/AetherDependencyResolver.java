@@ -36,6 +36,9 @@ import org.eclipse.aether.resolution.ArtifactDescriptorPolicy;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.VersionRequest;
+import org.eclipse.aether.resolution.VersionResolutionException;
+import org.eclipse.aether.resolution.VersionResult;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.spi.locator.ServiceLocator;
@@ -64,15 +67,17 @@ public class AetherDependencyResolver {
 
 	private final List<RemoteRepository> repositories;
 
-	public AetherDependencyResolver(RemoteRepository... remoteRepositories) {
+	public AetherDependencyResolver(File localMavenRepository, RemoteRepository... remoteRepositories) {
 		ServiceLocator serviceLocator = createServiceLocator();
 		this.repositorySystem = createRepositorySystem(serviceLocator);
-		this.session = createRepositorySystemSession(this.repositorySystem);
+		this.session = createRepositorySystemSession(localMavenRepository, this.repositorySystem);
 		this.repositories = Arrays.asList(remoteRepositories);
 	}
 
-	public static AetherDependencyResolver withAllRepositories() {
-		return new AetherDependencyResolver(SPRING_IO_RELEASE, SPRING_IO_MILESTONE, SPRING_IO_SNAPSHOT);
+	public static AetherDependencyResolver withAllRepositories(boolean useLocalRepo) {
+		File localMavenRepository = useLocalRepo ? getM2RepoDirectory() : getTempM2RepoDirectory();
+		return new AetherDependencyResolver(localMavenRepository, SPRING_IO_RELEASE,
+				SPRING_IO_MILESTONE, SPRING_IO_SNAPSHOT);
 	}
 
 	public ArtifactResult resolveDependency(String dependency) throws ArtifactResolutionException {
@@ -82,14 +87,20 @@ public class AetherDependencyResolver {
 		return this.repositorySystem.resolveArtifact(session, request);
 	}
 
+	public VersionResult resolveVersion(String dependency) throws VersionResolutionException {
+		VersionRequest versionRequest = new VersionRequest(new DefaultArtifact(dependency), this.repositories, null);
+		return this.repositorySystem.resolveVersion(session, versionRequest);
+	}
+
 	private static RepositorySystem createRepositorySystem(ServiceLocator serviceLocator) {
 		return serviceLocator.getService(RepositorySystem.class);
 	}
 
-	private static RepositorySystemSession createRepositorySystemSession(RepositorySystem repositorySystem) {
+	private static RepositorySystemSession createRepositorySystemSession(File localMavenRepository,
+			RepositorySystem repositorySystem) {
 		DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
-		LocalRepository localRepository = new LocalRepository(getM2RepoDirectory());
+		LocalRepository localRepository = new LocalRepository(localMavenRepository);
 		LocalRepositoryManager localRepositoryManager = repositorySystem
 				.newLocalRepositoryManager(session, localRepository);
 		session.setLocalRepositoryManager(localRepositoryManager);
@@ -118,9 +129,11 @@ public class AetherDependencyResolver {
 		return new File(System.getProperty("user.home"), ".m2");
 	}
 
-
-	public static void main(String[] args) throws Exception {
-		System.out.println(AetherDependencyResolver.withAllRepositories()
-				.resolveDependency("org.springframework.boot:spring-boot:1.2.6.RELEASE"));
+	private static File getTempM2RepoDirectory() {
+		File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+		File file = new File(tmpDir, "tmp-maven-repo");
+		file.mkdirs();
+		return file;
 	}
+
 }

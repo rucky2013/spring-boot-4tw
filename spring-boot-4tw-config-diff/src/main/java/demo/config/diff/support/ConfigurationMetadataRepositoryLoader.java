@@ -24,6 +24,8 @@ import java.util.zip.ZipEntry;
 
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.VersionResolutionException;
+import org.eclipse.aether.resolution.VersionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +55,18 @@ public class ConfigurationMetadataRepositoryLoader {
 		load(builder, "org.springframework.boot:spring-boot-autoconfigure:" + version, true);
 		load(builder, "org.springframework.boot:spring-boot-devtools:" + version, false);
 		return builder.build();
+	}
+
+	public String resolveSnapshotVersion(String version) {
+		try {
+			VersionResult versionResult = dependencyResolver
+					.resolveVersion("org.springframework.boot:spring-boot:" + version);
+			return versionResult.getVersion();
+		}
+		catch (VersionResolutionException e) {
+			logger.error("Could not resolve version '" + version + "'", e);
+		}
+		return version;
 	}
 
 	private Resource load(ConfigurationMetadataRepositoryJsonBuilder builder, String coordinates, boolean mandatory)

@@ -28,7 +28,7 @@ public class ConfigurationDiffResultLoader {
 	}
 
 	public ConfigurationDiffResultLoader() {
-		this(new ConfigDiffGenerator(AetherDependencyResolver.withAllRepositories()));
+		this(new ConfigDiffGenerator(AetherDependencyResolver.withAllRepositories(false)));
 	}
 
 	/**

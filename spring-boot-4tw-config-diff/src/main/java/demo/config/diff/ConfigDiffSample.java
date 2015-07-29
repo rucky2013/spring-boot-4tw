@@ -25,7 +25,8 @@ import demo.config.diff.support.AetherDependencyResolver;
 public class ConfigDiffSample {
 
 	public static void main(String[] args) throws Exception {
-		ConfigDiffResult configDiffResult = new ConfigDiffGenerator(AetherDependencyResolver.withAllRepositories())
+		ConfigDiffResult configDiffResult = new ConfigDiffGenerator(AetherDependencyResolver
+				.withAllRepositories(false))
 				.generateDiff("1.3.0.M1", "1.3.0.BUILD-SNAPSHOT");
 
 		System.out.println(configDiffResult); // A bit useless for now
