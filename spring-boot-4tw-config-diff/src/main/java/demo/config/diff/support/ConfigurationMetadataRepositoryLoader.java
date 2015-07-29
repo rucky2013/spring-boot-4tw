@@ -50,10 +50,10 @@ public class ConfigurationMetadataRepositoryLoader {
 
 	public ConfigurationMetadataRepository load(String version) throws IOException {
 		ConfigurationMetadataRepositoryJsonBuilder builder = ConfigurationMetadataRepositoryJsonBuilder.create();
-		load(builder, "org.springframework.boot:spring-boot:" + version, true);
-		load(builder, "org.springframework.boot:spring-boot-actuator:" + version, true);
-		load(builder, "org.springframework.boot:spring-boot-autoconfigure:" + version, true);
-		load(builder, "org.springframework.boot:spring-boot-devtools:" + version, false);
+		load(builder, "org.springframework.boot:spring-boot", version, true);
+		load(builder, "org.springframework.boot:spring-boot-actuator", version, true);
+		load(builder, "org.springframework.boot:spring-boot-autoconfigure", version, true);
+		load(builder, "org.springframework.boot:spring-boot-devtools", version, false);
 		return builder.build();
 	}
 
@@ -69,8 +69,10 @@ public class ConfigurationMetadataRepositoryLoader {
 		return version;
 	}
 
-	private Resource load(ConfigurationMetadataRepositoryJsonBuilder builder, String coordinates, boolean mandatory)
+	private Resource load(ConfigurationMetadataRepositoryJsonBuilder builder, String moduleId,
+			String version, boolean mandatory)
 			throws IOException {
+		String coordinates = moduleId + ":" + version;
 		try {
 			ArtifactResult artifactResult = dependencyResolver.resolveDependency(coordinates);
 			File file = artifactResult.getArtifact().getFile();
@@ -92,7 +94,7 @@ public class ConfigurationMetadataRepositoryLoader {
 		}
 		catch (ArtifactResolutionException e) {
 			if (mandatory) {
-				throw new IllegalStateException("Could not load " + coordinates, e);
+				throw new UnknownSpringBootVersion("Could not load '" + coordinates + "'", version);
 			}
 			logger.info("Ignoring '" + coordinates + " (not found)");
 		}
