@@ -1,17 +1,28 @@
 spring:
   resources:
-    cache-period: 3600
     chain:
       enabled: true
-      strategy:
-        content:
-         enabled: true
+
+server:
+  compression:
+    enabled: true
+    mime-types: application/json, text/css, application/javascript
+    min-response-size: 2048
 
 ---
-
 spring:
   profiles: development
   resources:
     static-locations: classpath:/META-INF/resources/, classpath:/static/, classpath:/public/, file://${user.dir}/spring-boot-4tw-client/src/, file://${user.dir}/spring-boot-4tw-client/node_modules/
     cache-period: 0
+
+---
+spring:
+  profiles: production
+  resources:
+    cache-period: 3600
+    chain:
+      strategy:
+        content:
+          enabled: true
 

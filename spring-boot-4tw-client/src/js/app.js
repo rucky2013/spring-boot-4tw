@@ -1,7 +1,6 @@
 angular.module('diffApp', ['ngRoute'])
 
-    .config(function ($interpolateProvider, $locationProvider) {
-        $interpolateProvider.startSymbol('[[').endSymbol(']]');
+    .config(function ($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');
     })
     .factory('jQuery', ['$window', function ($window) {
@@ -21,20 +20,22 @@ angular.module('diffApp', ['ngRoute'])
                 templateUrl: 'diffListTemplate'
             });
     })
-    .service('ConfigDiff', ['$http', 'springBootVersionURL', function ($http, springBootVersionURL) {
-        var fetchDiff = function (fromVersion, toVersion, full) {
-            return $http.get("/diff/" + fromVersion + "/" + toVersion + "/")
-                .success(function (data) {
-                    /*
-                     return {
+    .service('ConfigDiff', ['$http', 'springBootVersionURL', '$q', '$timeout',
+        function ($http, springBootVersionURL, $q, $timeout) {
+        var fetchDiff = function (fromVersion, toVersion) {
 
-                     fromVersion: data.leftVersion,
-                     toVersion: data.rightVersion,
-                     groups: data.allGroups
-                     }
-                     */
-                    return data.allGroups;
-                });
+            var deferred = $q.defer();
+            $timeout(function() {
+                $http.get("/diff/" + fromVersion + "/" + toVersion + "/")
+                    .success(function (data) {
+                        deferred.resolve(data);
+                    })
+                    .error(function(data, status, headers, config) {
+                        console.dir(data);
+                        deferred.reject('API Error');
+                    });
+            }, 3000);
+            return deferred.promise;
         };
 
         var fetchBootVersions = function () {
@@ -58,10 +59,12 @@ angular.module('diffApp', ['ngRoute'])
             $('.navbar-side').affix({offset: {top: 10}});
             var fromVersion = $routeParams.fromVersion;
             var toVersion = $routeParams.toVersion;
+            $scope.loading = true;
 
-            ConfigDiff.fetchDiff(fromVersion, toVersion, false)
-                .success(function (data) {
+            ConfigDiff.fetchDiff(fromVersion, toVersion)
+                .then(function (data) {
                     $scope.diffs = data;
+                    $scope.loading = false;
                 });
 
             $scope.compare = function (fromVersion, toVersion) {

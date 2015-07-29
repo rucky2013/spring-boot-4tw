@@ -45,31 +45,31 @@
                             <input type="checkbox" name="full" ng-model="full" /> Show All
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary">Compare</button>
+                    <button type="submit" class="btn btn-primary" ><span ng-if="loading" class="glyphicon glyphicon-refresh spinning"></span> Compare</button>
                 </form>
             </div>
             <div class="col-md-9" role="main">
-                <table ng-repeat="group in diffs" class="table table-hover table-metadata" id="[[group.id | anchor]]">
-                    <caption>Group "[[group.id]]"</caption>
+                <table ng-repeat="group in diffs" class="table table-hover table-metadata" id="{{group.id | anchor}}">
+                    <caption>Group "{{group.id}}"</caption>
                     <thead>
                     <tr>
-                        <th class="col-md-6">[[fromVersion]]</th>
-                        <th class="col-md-6">[[toVersion]]</th>
+                        <th class="col-md-6">{{fromVersion}}</th>
+                        <th class="col-md-6">{{toVersion}}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="prop in group.properties" class="[[prop | cssDiffClass]]">
+                    <tr ng-repeat="prop in group.properties" class="{{prop | cssDiffClass}}">
                         <td>
                             <span ng-if="prop.left.deprecated" class="deprecated"
-                                  title="[[prop.right.deprecation.reason]] See: [[prop.right.deprecation.replacement]]">[[prop.left.name]]</span>
+                                  title="{{prop.right.deprecation.reason}} See: {{prop.right.deprecation.replacement}}">{{prop.left.name}}</span>
                             <span ng-if="!prop.left.deprecation"
-                                  title="[[prop.left.description]]">[[prop.left.name]]</span>
+                                  title="{{prop.left.description}}">{{prop.left.name}}</span>
                         </td>
                         <td>
                             <span ng-if="prop.right.deprecated" class="deprecated"
-                                  title="[[prop.right.deprecation.reason]] See: [[prop.right.deprecation.replacement]]">[[prop.right.name]]</span>
+                                  title="{{prop.right.deprecation.reason}} See: {{prop.right.deprecation.replacement}}">{{prop.right.name}}</span>
                             <span ng-if="!prop.right.deprecated"
-                                  title="[[prop.right.description]]">[[prop.right.name]]</span>
+                                  title="{{prop.right.description}}">{{prop.right.name}}</span>
                         </td>
                     </tr>
                     </tbody>
@@ -78,7 +78,7 @@
             <div class="col-md-3" role="complementary">
                 <nav class="navbar-side" data-spy="affix" data-offset-top="10">
                     <ul class="nav">
-                        <li ng-repeat="group in diffs"><a ng-click="gotoAnchor($event, group)" href="#[[group.id | anchor]]">[[group.id]]</a></li>
+                        <li ng-repeat="group in diffs"><a ng-click="gotoAnchor($event, group)" href="#{{group.id | anchor}}">{{group.id}}</a></li>
                     </ul>
                 </nav>
             </div>
