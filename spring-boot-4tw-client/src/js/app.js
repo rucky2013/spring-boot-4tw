@@ -25,16 +25,14 @@ angular.module('diffApp', ['ngRoute'])
         var fetchDiff = function (fromVersion, toVersion) {
 
             var deferred = $q.defer();
-            $timeout(function() {
-                $http.get("/diff/" + fromVersion + "/" + toVersion + "/")
-                    .success(function (data) {
-                        deferred.resolve(data);
-                    })
-                    .error(function(data, status, headers, config) {
-                        console.dir(data);
-                        deferred.reject('API Error');
-                    });
-            }, 3000);
+            $http.get("/diff/" + fromVersion + "/" + toVersion + "/")
+                .success(function (data) {
+                    deferred.resolve(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.dir(data);
+                    deferred.reject('API Error');
+                });
             return deferred.promise;
         };
 
