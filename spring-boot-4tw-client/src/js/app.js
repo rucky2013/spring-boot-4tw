@@ -1,13 +1,12 @@
-angular.module('diffApp', ['ngRoute'])
+angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
 
     .config(function ($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');
     })
     .factory('jQuery', ['$window', function ($window) {
         return $window.jQuery;
-    }
-    ])
-    .value('springBootVersionURL', 'https://spring.io/project_metadata/spring-boot.json')
+    }])
+    .value('springBootVersionURL', '/springboot/versions.json')
 
     .config(function ($routeProvider) {
         $routeProvider
@@ -44,10 +43,15 @@ angular.module('diffApp', ['ngRoute'])
             fetchBootVersions: fetchBootVersions
         }
     }])
-    .controller('FormController', ['$scope', '$location', 'jQuery', function ($scope, $location, $) {
-        $scope.compare = function (fromVersion, toVersion) {
-            $location.url("/compare/" + fromVersion + "/" + toVersion + "/");
-        }
+    .controller('FormController', ['$scope', '$location', 'jQuery', 'ConfigDiff',
+        function ($scope, $location, $, ConfigDiff) {
+            $scope.bootVersions = ConfigDiff.fetchBootVersions()
+                .then(function(result) {
+                    $scope.bootVersions = result.data;
+                });
+            $scope.compare = function (fromVersion, toVersion) {
+                $location.url("/compare/" + fromVersion + "/" + toVersion + "/");
+            }
     }])
     .controller('DiffController', ['$scope', '$routeParams', 'ConfigDiff', '$location', '$anchorScroll', 'jQuery',
         function ($scope, $routeParams, ConfigDiff, $location, $anchorScroll, $) {
@@ -74,7 +78,10 @@ angular.module('diffApp', ['ngRoute'])
                     });
                     $scope.loading = false;
                 });
-
+            $scope.bootVersions = ConfigDiff.fetchBootVersions()
+                .then(function(result) {
+                    $scope.bootVersions = result.data;
+                });
             $scope.compare = function (fromVersion, toVersion) {
                 $location.url("/compare/" + fromVersion + "/" + toVersion + "/");
             }

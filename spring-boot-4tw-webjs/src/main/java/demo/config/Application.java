@@ -40,6 +40,7 @@ public class Application {
 					.factoryOf(Duration.ONE_HOUR));
 			config.setStatisticsEnabled(true);
 			cacheManager.createCache("diffs", config);
+			cacheManager.createCache("bootversions", config);
 
 		};
 	}

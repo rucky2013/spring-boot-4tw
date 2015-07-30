@@ -2,6 +2,7 @@ package demo.config.springboot;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,6 +24,7 @@ public class SpringBootVersionService {
 		this(new RestTemplate());
 	}
 
+	@Cacheable("bootversions")
 	public List<String> fetchBootVersions() {
 		String content = restTemplate.getForObject(BOOT_VERSION_ENDPOINT, String.class);
 		JSONObject json = new JSONObject(content);
