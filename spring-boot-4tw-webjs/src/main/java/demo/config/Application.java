@@ -27,7 +27,7 @@ public class Application {
 	public HealthIndicator springIoHealthIndicator() {
 		return () -> {
 			ResponseEntity<Object> entity = new RestTemplate()
-					.getForEntity("http://start.spring.io", Object.class);
+					.getForEntity("https://spring.io/project_metadata/spring-boot.json", Object.class);
 			return Health.up().withDetail("httpStatus", entity.getStatusCode()).build();
 		};
 	}
