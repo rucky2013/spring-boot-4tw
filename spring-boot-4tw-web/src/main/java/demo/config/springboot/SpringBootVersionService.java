@@ -16,7 +16,7 @@ public class SpringBootVersionService {
 
 	private final RestTemplate restTemplate;
 
-	SpringBootVersionService(RestTemplate restTemplate) {
+	protected SpringBootVersionService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 

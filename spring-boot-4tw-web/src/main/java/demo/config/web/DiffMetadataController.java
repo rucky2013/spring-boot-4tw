@@ -1,23 +1,23 @@
 package demo.config.web;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
+
 import demo.config.diff.ConfigDiffResult;
 import demo.config.diff.ConfigDiffType;
 import demo.config.diffview.ConfigDiff;
 import demo.config.diffview.DiffViewConverter;
 import demo.config.diffview.GroupDiff;
 import demo.config.service.ConfigurationDiffResultLoader;
-import demo.config.springboot.SpringBootVersionService;
 import demo.config.validation.Version;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class DiffMetadataController {
@@ -26,14 +26,11 @@ public class DiffMetadataController {
 
 	private final DiffViewConverter converter;
 
-	private final SpringBootVersionService versionService;
-
 	@Autowired
 	public DiffMetadataController(ConfigurationDiffResultLoader resultLoader,
-	                              DiffViewConverter converter, SpringBootVersionService versionService) {
+			DiffViewConverter converter) {
 		this.resultLoader = resultLoader;
 		this.converter = converter;
-		this.versionService = versionService;
 	}
 
 	@RequestMapping("/")
