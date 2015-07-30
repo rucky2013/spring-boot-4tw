@@ -41,8 +41,8 @@ public class DiffMetadataController {
 			ConfigDiffResult result = resultLoader.load(diffRequest.fromVersion, diffRequest.toVersion);
 			ConfigDiff configDiff = converter.convert(result);
 
-			model.addAttribute("previousVersion", configDiff.getPreviousVersion());
-			model.addAttribute("nextVersion", configDiff.getNextVersion());
+			model.addAttribute("previousVersion", diffRequest.fromVersion);
+			model.addAttribute("nextVersion", diffRequest.toVersion);
 			model.addAttribute("full", full);
 			List<GroupDiff> groups = configDiff.getGroups().stream()
 					.filter(g -> full || g.getDiffType() != ConfigDiffType.EQUALS).collect(Collectors.toList());
