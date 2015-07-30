@@ -1,25 +1,19 @@
 package demo.config.web;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
-
 import demo.config.diff.ConfigDiffResult;
-import demo.config.diff.ConfigDiffType;
 import demo.config.diff.support.UnknownSpringBootVersion;
 import demo.config.model.ConfigurationDiff;
 import demo.config.model.ConfigurationDiffHandler;
-import demo.config.model.ConfigurationGroupDiff;
 import demo.config.service.ConfigurationDiffResultLoader;
 import demo.config.validation.Version;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.validation.Valid;
 
 @Controller
 public class DiffMetadataController {
@@ -35,16 +29,13 @@ public class DiffMetadataController {
 	}
 
 	@RequestMapping("/diff/{fromVersion}/{toVersion}/")
-	public ResponseEntity<List<ConfigurationGroupDiff>> diffMetadata(@Valid @ModelAttribute DiffRequest diffRequest,
-			@RequestParam(defaultValue = "false") String full) throws BindException {
+	public ResponseEntity<ConfigurationDiff> diffMetadata(
+			@Valid @ModelAttribute DiffRequest diffRequest) throws BindException {
 
 		ConfigDiffResult result = loadDiff(diffRequest);
 		ConfigurationDiff configurationDiff = handler.handle(result);
 
-
-		List<ConfigurationGroupDiff> content = configurationDiff.getGroups().stream()
-				.filter(g -> "true".equals(full) || g.getDiffType() != ConfigDiffType.EQUALS).collect(Collectors.toList());
-		return ResponseEntity.ok().eTag(createDiffETag(configurationDiff)).body(content);
+		return ResponseEntity.ok().eTag(createDiffETag(configurationDiff)).body(configurationDiff);
 	}
 
 	private ConfigDiffResult loadDiff(DiffRequest diffRequest) throws BindException {

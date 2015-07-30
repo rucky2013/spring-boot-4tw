@@ -25,23 +25,26 @@ public class ConfigurationDiffHandler {
 		Map<String,ConfigDiffType> groupIdToDiffType = mapGroupIdToDiffType(original);
 		Collection<ConfigGroupDiff> allGroups = sortGroups(original.getAllGroups());
 		for (ConfigGroupDiff originalGroup : allGroups) {
-			ConfigurationGroupDiff groupDiff = new ConfigurationGroupDiff();
 			String groupId = originalGroup.getId();
-			groupDiff.setId(groupId);
-			groupDiff.setDiffType(groupIdToDiffType.get(groupId));
-			Map<String,ConfigDiffType> propertyIdToDiffType = mapPropertyIdToDiffType(originalGroup);
-			Collection<ConfigPropertyDiff> allProperties = sortProperties(originalGroup.getAllProperties());
-			for (ConfigPropertyDiff originalProperty : allProperties) {
-				String propertyId = originalProperty.getId();
-				ConfigurationPropertyDiff propertyDiff = new ConfigurationPropertyDiff();
-				propertyDiff.setId(propertyId);
-				propertyDiff.setDiffType(propertyIdToDiffType.get(propertyId));
-				propertyDiff.setLeft(originalProperty.getLeft());
-				propertyDiff.setRight(originalProperty.getRight());
-				groupDiff.getProperties().add(propertyDiff);
-			}
+			ConfigDiffType diffType = groupIdToDiffType.get(groupId);
+			if(diffType != ConfigDiffType.EQUALS) {
+				ConfigurationGroupDiff groupDiff = new ConfigurationGroupDiff();
+				groupDiff.setId(groupId);
+				groupDiff.setDiffType(diffType);
+				Map<String,ConfigDiffType> propertyIdToDiffType = mapPropertyIdToDiffType(originalGroup);
+				Collection<ConfigPropertyDiff> allProperties = sortProperties(originalGroup.getAllProperties());
+				for (ConfigPropertyDiff originalProperty : allProperties) {
+					String propertyId = originalProperty.getId();
+					ConfigurationPropertyDiff propertyDiff = new ConfigurationPropertyDiff();
+					propertyDiff.setId(propertyId);
+					propertyDiff.setDiffType(propertyIdToDiffType.get(propertyId));
+					propertyDiff.setLeft(originalProperty.getLeft());
+					propertyDiff.setRight(originalProperty.getRight());
+					groupDiff.getProperties().add(propertyDiff);
+				}
 
-			diff.getGroups().add(groupDiff);
+				diff.getGroups().add(groupDiff);
+			}
 		}
 
 		return diff;

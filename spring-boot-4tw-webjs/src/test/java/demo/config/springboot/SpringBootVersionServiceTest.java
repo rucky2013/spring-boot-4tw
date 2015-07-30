@@ -1,17 +1,17 @@
 package demo.config.springboot;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.List;
-
 import org.junit.Test;
-
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *

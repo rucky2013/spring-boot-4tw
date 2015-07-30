@@ -30,8 +30,7 @@ angular.module('diffApp', ['ngRoute'])
                     deferred.resolve(data);
                 })
                 .error(function(data, status, headers, config) {
-                    console.dir(data);
-                    deferred.reject('API Error');
+                    deferred.reject(data);
                 });
             return deferred.promise;
         };
@@ -61,7 +60,18 @@ angular.module('diffApp', ['ngRoute'])
 
             ConfigDiff.fetchDiff(fromVersion, toVersion)
                 .then(function (data) {
-                    $scope.diffs = data;
+                    $scope.diffs = {
+                        groups: data.groups,
+                        fromVersion: data.leftVersion,
+                        toVersion: data.rightVersion
+                    };
+                    $scope.loading = false;
+                },
+                function(error) {
+                    $scope.errors = {};
+                    error.errors.forEach(function(error) {
+                        return $scope.errors[error.field] = true;
+                    });
                     $scope.loading = false;
                 });
 

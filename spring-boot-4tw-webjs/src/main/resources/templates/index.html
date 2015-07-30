@@ -29,32 +29,38 @@
 
         <div class="row">
             <div class="col-md-9">
-                <form class="form-inline version-form" ng-submit="compare(fromVersion, toVersion)" id="compare">
-                    <div class="form-group">
+                <form class="form-inline version-form {{errors ? 'has-feedback' : ''}}"
+                      ng-submit="compare(fromVersion, toVersion)" id="compare">
+                    <div class="form-group {{errors.fromVersion ? 'has-feedback  has-error' : ''}}">
                         <label class="sr-only" for="fromVersion">From version</label>
-                        <input type="text" size="30" class="form-control" id="fromVersion"
-                               name="fromVersion" placeholder="from Version" ng-model="fromVersion" />
+                        <input type="text" size="30" class="form-control"
+                               id="fromVersion" ng-model="fromVersion"
+                               name="fromVersion" placeholder="from Version" />
+                        <span ng-if="errors.fromVersion"
+                              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group {{errors.toVersion ? 'has-feedback has-error' : ''}}">
                         <label class="sr-only" for="toVersion">To version</label>
-                        <input type="text" size="30" class="form-control" id="toVersion"
-                               name="toVersion" placeholder="to Version" ng-model="toVersion" />
+                        <input type="text" size="30" class="form-control"
+                               id="toVersion" ng-model="toVersion"
+                               name="toVersion" placeholder="to Version" />
+                        <span ng-if="errors.toVersion"
+                              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                     </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="full" ng-model="full" /> Show All
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary" ><span ng-if="loading" class="glyphicon glyphicon-refresh spinning"></span> Compare</button>
+                    <button type="submit" class="btn btn-primary" >
+                        <span ng-if="loading" class="glyphicon glyphicon-refresh spinning"></span> Compare
+                    </button>
+                    <p class="bg-danger" ng-if="errors">Invalid version(s).</p>
                 </form>
+
             </div>
             <div class="col-md-9" role="main">
-                <table ng-repeat="group in diffs" class="table table-hover table-metadata" id="{{group.id | anchor}}">
+                <table ng-repeat="group in diffs.groups" class="table table-hover table-metadata" id="{{group.id | anchor}}">
                     <caption>Group "{{group.id}}"</caption>
                     <thead>
                     <tr>
-                        <th class="col-md-6">{{fromVersion}}</th>
-                        <th class="col-md-6">{{toVersion}}</th>
+                        <th class="col-md-6">{{diffs.fromVersion}}</th>
+                        <th class="col-md-6">{{diffs.toVersion}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -78,7 +84,7 @@
             <div class="col-md-3" role="complementary">
                 <nav class="navbar-side" data-spy="affix" data-offset-top="10">
                     <ul class="nav">
-                        <li ng-repeat="group in diffs"><a ng-click="gotoAnchor($event, group)" href="#{{group.id | anchor}}">{{group.id}}</a></li>
+                        <li ng-repeat="group in diffs.groups"><a ng-click="gotoAnchor($event, group)" href="#{{group.id | anchor}}">{{group.id}}</a></li>
                     </ul>
                 </nav>
             </div>
