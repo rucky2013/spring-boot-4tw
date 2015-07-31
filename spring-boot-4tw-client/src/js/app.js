@@ -72,10 +72,7 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
                     $scope.loading = false;
                 },
                 function(error) {
-                    $scope.errors = {};
-                    error.errors.forEach(function(error) {
-                        return $scope.errors[error.field] = true;
-                    });
+                    $scope.exception = error;
                     $scope.loading = false;
                 });
             $scope.bootVersions = ConfigDiff.fetchBootVersions()

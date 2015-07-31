@@ -30,30 +30,26 @@
 
         <div class="row">
             <div class="col-md-9">
-                <form class="form-inline version-form {{errors ? 'has-feedback' : ''}}"
-                      ng-submit="compare(fromVersion, toVersion)" id="compare">
-                    <div class="form-group {{errors.fromVersion ? 'has-feedback  has-error' : ''}}">
+                <form class="form-inline version-form"
+                      ng-submit="compare(fromVersion, toVersion)" id="compare" name="compareForm">
+                    <div class="form-group">
                         <label class="sr-only" for="fromVersion">From version</label>
                         <input type="text" size="30" class="form-control"
                                id="fromVersion" ng-model="fromVersion"
                                name="fromVersion" placeholder="from Version"
-                               typeahead="version for version in bootVersions" />
-                        <span ng-if="errors.fromVersion"
-                              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                               typeahead="version for version in bootVersions" required="true" />
                     </div>
-                    <div class="form-group {{errors.toVersion ? 'has-feedback has-error' : ''}}">
+                    <div class="form-group">
                         <label class="sr-only" for="toVersion">To version</label>
                         <input type="text" size="30" class="form-control"
                                id="toVersion" ng-model="toVersion"
                                name="toVersion" placeholder="to Version"
-                               typeahead="version for version in bootVersions" />
-                        <span ng-if="errors.toVersion"
-                              class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                               typeahead="version for version in bootVersions" required="true" />
                     </div>
-                    <button type="submit" class="btn btn-primary" >
+                    <button type="submit" class="btn btn-primary" ng-disabled="compareForm.$invalid">
                         <span ng-if="loading" class="glyphicon glyphicon-refresh spinning"></span> Compare
                     </button>
-                    <p class="bg-danger" ng-if="errors">Invalid version(s).</p>
+                    <p class="bg-danger" ng-if="exception">{{exception.message}}</p>
                 </form>
 
             </div>
