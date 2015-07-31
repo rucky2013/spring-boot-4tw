@@ -66,8 +66,8 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
                 .then(function (data) {
                     $scope.diffs = {
                         groups: data.groups,
-                        fromVersion: data.leftVersion,
-                        toVersion: data.rightVersion
+                        fromVersion: fromVersion,
+                        toVersion: toVersion
                     };
                     $scope.loading = false;
                 },
