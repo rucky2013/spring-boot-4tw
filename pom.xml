@@ -135,7 +135,7 @@
 			<name>Spring Snapshots</name>
 			<url>http://repo.spring.io/snapshot</url>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
