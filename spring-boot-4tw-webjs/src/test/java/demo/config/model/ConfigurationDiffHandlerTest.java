@@ -21,9 +21,9 @@ public class ConfigurationDiffHandlerTest {
 		ConfigDiffResult original = generateDiff("1.0.1.RELEASE", "1.1.0.RELEASE");
 		ConfigurationDiff diff = new ConfigurationDiffHandler().handle(original);
 		List<ConfigurationGroupDiff> groups = diff.getGroups();
-		assertEquals(3, groups.size()); // Automatic sorting
+		assertEquals(2, groups.size()); // Automatic sorting
 		assertEquals("server", groups.get(0).getId());
-		assertEquals("server.undertow", groups.get(2).getId());
+		assertEquals("server.undertow", groups.get(1).getId());
 	}
 
 }
