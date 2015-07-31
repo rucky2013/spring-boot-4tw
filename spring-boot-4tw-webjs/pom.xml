@@ -43,9 +43,9 @@
 			<artifactId>cache-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.hazelcast</groupId>
-			<artifactId>hazelcast-spring</artifactId>
-			<scope>runtime</scope>
+			<groupId>org.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>3.0.0.m1</version>
 		</dependency>
 
 		<dependency>
