@@ -14,12 +14,11 @@
     <build>
 		<resources>
 			<resource>
-				<directory>${basedir}</directory>
-				<includes>
-					<include>src/**</include>
-					<include>node_modules/**</include>
-				</includes>
+				<directory>${basedir}/src</directory>
 			</resource>
+            <resource>
+                <directory>${basedir}/node_modules</directory>
+            </resource>
 		</resources>
 		<plugins>
             <plugin>
