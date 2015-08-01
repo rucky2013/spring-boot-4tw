@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 public class Application {
 
 	public static void main(String[] args) {
+		// Workaround for https://github.com/ehcache/ehcache3/issues/387
 		System.setProperty("org.ehcache.statisticsExecutor.poolSize", "1");
 		SpringApplication.run(Application.class, args);
 	}
