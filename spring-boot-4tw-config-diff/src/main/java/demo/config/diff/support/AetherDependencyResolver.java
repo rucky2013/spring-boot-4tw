@@ -132,7 +132,7 @@ public class AetherDependencyResolver {
 	private static File getTempM2RepoDirectory() {
 		File tmpDir = new File(System.getProperty("java.io.tmpdir"));
 		File file = new File(tmpDir, "tmp-maven-repo");
-		if (!file.mkdirs()) {
+		if (!file.exists() && !file.mkdirs()) {
 			throw new IllegalStateException("Could not create temp directory " + file.getAbsolutePath());
 		}
 		return file;
