@@ -16,19 +16,67 @@
 
 package demo.config.diff;
 
+import java.util.Comparator;
+
 import demo.config.diff.support.AetherDependencyResolver;
 
-/**
- *
- * @author Stephane Nicoll
- */
+import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
+import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepository;
+import org.springframework.util.StringUtils;
+
 public class ConfigDiffSample {
+
+	private static final String NEW_LINE = System.getProperty("line.separator");
 
 	public static void main(String[] args) throws Exception {
 		ConfigDiffResult configDiffResult = new ConfigDiffGenerator(AetherDependencyResolver
 				.withAllRepositories(false))
-				.generateDiff("1.3.0.M1", "1.3.0.BUILD-SNAPSHOT");
+				.generateDiff("1.3.0.M1", "1.3.0.M3");
 
-		System.out.println(configDiffResult); // A bit useless for now
+		System.out.println(formatDiff(configDiffResult));
+	}
+
+	private static String formatDiff(ConfigDiffResult diff) {
+		StringBuilder out = new StringBuilder();
+		out.append("Configuration properties change between `").append(diff.getLeftVersion())
+				.append("` and `").append(diff.getRightVersion()).append("`").append(NEW_LINE);
+		out.append(NEW_LINE);
+
+		diff.getAllGroups().stream().sorted(groupComparator()).forEach(groupDiff -> {
+			out.append("Group '").append(groupDiff.getId()).append("'").append(NEW_LINE);
+			out.append("===========================================================").append(NEW_LINE);
+			for (ConfigPropertyDiff propertyDiff : groupDiff.getAllProperties()) {
+				if (propertyDiff.getLeft() == null && propertyDiff.getRight() != null) {
+					appendProperty(out, propertyDiff.getRight(), true).append(NEW_LINE);
+				}
+				else if (propertyDiff.getLeft() != null && propertyDiff.getRight() == null) {
+					appendProperty(out, propertyDiff.getLeft(), false).append(NEW_LINE);
+				}
+			}
+			out.append(NEW_LINE);
+		});
+		return out.toString();
+	}
+
+	private static StringBuilder appendProperty(StringBuilder sb, ConfigurationMetadataProperty property, boolean add) {
+		String symbol = add ? "[+]" : "[-]";
+		sb.append(symbol).append(" ").append(property.getId());
+		String shortDescription = property.getShortDescription();
+		if (StringUtils.hasText(shortDescription)) {
+			sb.append(" - ").append(shortDescription);
+		}
+		return sb;
+	}
+
+	private static Comparator<ConfigGroupDiff> groupComparator() {
+		return (o1, o2) -> {
+			if (ConfigurationMetadataRepository.ROOT_GROUP.equals(o1.getId())) {
+				return -1;
+			}
+			if (ConfigurationMetadataRepository.ROOT_GROUP.equals(o2.getId())) {
+				return 1;
+			}
+			return o1.getId().compareTo(o2.getId());
+		};
 	}
 }
