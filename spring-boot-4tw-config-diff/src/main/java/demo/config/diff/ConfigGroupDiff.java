@@ -29,7 +29,7 @@ public class ConfigGroupDiff implements Serializable {
 		this.id = id;
 		this.left = left;
 		this.right = right;
-		this.properties = new LinkedMultiValueMap<ConfigDiffType, ConfigPropertyDiff>();
+		this.properties = new LinkedMultiValueMap<>();
 	}
 
 	public String getId() {

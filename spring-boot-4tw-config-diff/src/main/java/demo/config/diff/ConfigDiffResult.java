@@ -37,7 +37,7 @@ public class ConfigDiffResult implements Serializable {
 	private final String rightVersion;
 
 	private final MultiValueMap<ConfigDiffType, ConfigGroupDiff> groups =
-			new LinkedMultiValueMap<ConfigDiffType, ConfigGroupDiff>();
+			new LinkedMultiValueMap<>();
 
 	public ConfigDiffResult(String leftVersion, String rightVersion) {
 		this.leftVersion = leftVersion;

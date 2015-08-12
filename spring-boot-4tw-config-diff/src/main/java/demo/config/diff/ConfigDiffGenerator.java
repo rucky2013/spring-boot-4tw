@@ -56,7 +56,7 @@ public class ConfigDiffGenerator {
 
 	protected ConfigDiffGenerator diffGroup(ConfigDiffResult result,
 			ConfigurationMetadataRepository left, ConfigurationMetadataRepository right) {
-		List<String> matches = new ArrayList<String>();
+		List<String> matches = new ArrayList<>();
 		Map<String, ConfigurationMetadataGroup> leftGroups = left.getAllGroups();
 		Map<String, ConfigurationMetadataGroup> rightGroups = right.getAllGroups();
 		for (ConfigurationMetadataGroup leftGroup : leftGroups.values()) {
@@ -91,7 +91,7 @@ public class ConfigDiffGenerator {
 
 	protected ConfigGroupDiff generateGroupDiff(ConfigurationMetadataGroup left, ConfigurationMetadataGroup right) {
 		ConfigGroupDiff group = new ConfigGroupDiff(left.getId(), left, right);
-		List<String> matches = new ArrayList<String>();
+		List<String> matches = new ArrayList<>();
 		Map<String, ConfigurationMetadataProperty> leftProperties = left.getProperties();
 		Map<String, ConfigurationMetadataProperty> rightProperties = right.getProperties();
 		for (ConfigurationMetadataProperty leftProperty : leftProperties.values()) {
@@ -103,8 +103,7 @@ public class ConfigDiffGenerator {
 			}
 			else {
 				matches.add(id);
-				ConfigDiffType diffType = (equals(leftProperty, rightProperty) ? ConfigDiffType.EQUALS : ConfigDiffType.MODIFY);
-				group.register(diffType,
+				group.register(ConfigDiffType.EQUALS, // NICE: handle diff in property def
 						new ConfigPropertyDiff(leftProperty.getId(), leftProperty, rightProperty));
 			}
 		}
@@ -127,10 +126,6 @@ public class ConfigDiffGenerator {
 			}
 		}
 		return true;
-	}
-
-	private boolean equals(ConfigurationMetadataProperty left, ConfigurationMetadataProperty right) {
-		return true; // TODO
 	}
 
 }

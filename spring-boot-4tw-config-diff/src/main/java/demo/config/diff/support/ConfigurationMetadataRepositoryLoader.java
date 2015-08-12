@@ -79,13 +79,9 @@ public class ConfigurationMetadataRepositoryLoader {
 			JarFile jarFile = new JarFile(file);
 			ZipEntry entry = jarFile.getEntry("META-INF/spring-configuration-metadata.json");
 			if (entry != null) {
-				InputStream stream = jarFile.getInputStream(entry);
-				try {
-					logger.info("Adding meta-data from '" + coordinates + "'");
+				logger.info("Adding meta-data from '" + coordinates + "'");
+				try (InputStream stream = jarFile.getInputStream(entry)) {
 					builder.withJsonResource(stream);
-				}
-				finally {
-					stream.close();
 				}
 			}
 			else {
