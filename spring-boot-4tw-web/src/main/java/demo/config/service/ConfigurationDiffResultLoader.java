@@ -10,11 +10,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-/**
- * Loads a diff between two Spring Boot versions.
- *
- * @author Stephane Nicoll
- */
 @Service
 public class ConfigurationDiffResultLoader {
 

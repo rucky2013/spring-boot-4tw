@@ -1,41 +1,41 @@
 package demo.config.diffview;
 
-import demo.config.diff.ConfigDiffType;
-
 import java.util.LinkedList;
 import java.util.List;
 
+import demo.config.diff.ConfigDiffType;
+
 public class GroupDiff {
 
-    private String id;
+	private String id;
 
-    private String anchorName;
+	private String anchorName;
 
-    private String previousVersion;
+	private String previousVersion;
 
-    private String nextVersion;
+	private String nextVersion;
 
-    private ConfigDiffType diffType;
+	private ConfigDiffType diffType;
 
-    private final List<PropertyDiff> properties = new LinkedList<>();
+	private final List<PropertyDiff> properties = new LinkedList<>();
 
-    public GroupDiff(String id, String previousVersion, String nextVersion, ConfigDiffType diffType) {
-        this.id = id;
-        this.anchorName = this.id.replaceAll("\\.", "-");
-        this.previousVersion = previousVersion;
-        this.nextVersion = nextVersion;
-        this.diffType = diffType;
-    }
+	public GroupDiff(String id, String previousVersion, String nextVersion, ConfigDiffType diffType) {
+		this.id = id;
+		this.anchorName = this.id.replaceAll("\\.", "-");
+		this.previousVersion = previousVersion;
+		this.nextVersion = nextVersion;
+		this.diffType = diffType;
+	}
 
 	public String getId() {
 		return id;
 	}
 
 	public ConfigDiffType getDiffType() {
-        return diffType;
-    }
+		return diffType;
+	}
 
-    public void addProperty(PropertyDiff propertyDiff) {
-        this.properties.add(propertyDiff);
-    }
+	public void addProperty(PropertyDiff propertyDiff) {
+		this.properties.add(propertyDiff);
+	}
 }

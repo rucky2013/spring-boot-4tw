@@ -5,30 +5,30 @@ import java.util.List;
 
 public class ConfigDiff {
 
-    private String previousVersion;
+	private String previousVersion;
 
-    private String nextVersion;
+	private String nextVersion;
 
-    private final List<GroupDiff> groups = new LinkedList<>();
+	private final List<GroupDiff> groups = new LinkedList<>();
 
-    public ConfigDiff(String previousVersion, String nextVersion) {
-        this.previousVersion = previousVersion;
-        this.nextVersion = nextVersion;
-    }
+	public ConfigDiff(String previousVersion, String nextVersion) {
+		this.previousVersion = previousVersion;
+		this.nextVersion = nextVersion;
+	}
 
-    public String getPreviousVersion() {
-        return previousVersion;
-    }
+	public String getPreviousVersion() {
+		return previousVersion;
+	}
 
-    public String getNextVersion() {
-        return nextVersion;
-    }
+	public String getNextVersion() {
+		return nextVersion;
+	}
 
-    public List<GroupDiff> getGroups() {
-        return groups;
-    }
+	public List<GroupDiff> getGroups() {
+		return groups;
+	}
 
-    public void addGroup(GroupDiff group) {
-        this.groups.add(group);
-    }
+	public void addGroup(GroupDiff group) {
+		this.groups.add(group);
+	}
 }

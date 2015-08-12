@@ -31,9 +31,7 @@ public class Application {
 
 	@Bean
 	public EmbeddedServletContainerCustomizer servletContainerCustomizer() {
-		return container -> {
-			container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400.html"));
-		};
+		return container -> container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400.html"));
 	}
 
 }

@@ -11,11 +11,6 @@ import org.springframework.boot.autoconfigure.mustache.web.MustacheViewResolver;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 
-/**
- * Add standard functions to {@link MustacheViewResolver}.
- *
- * @author Stephane Nicoll
- */
 @Component
 class MustacheCustomizer {
 

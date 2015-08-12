@@ -4,11 +4,6 @@ import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-/**
- * A {@link ConstraintValidator} for a version.
- *
- * @author Stephane Nicoll
- */
 public class VersionValidator implements ConstraintValidator<Version, String> {
 
 	private static final Pattern versionPattern = Pattern.compile(

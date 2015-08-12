@@ -11,10 +11,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- *
- * @author Stephane Nicoll
- */
 public class VersionValidatorTest {
 
 	private Validator validator;
