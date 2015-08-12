@@ -27,7 +27,11 @@ public class GroupDiff {
         this.diffType = diffType;
     }
 
-    public ConfigDiffType getDiffType() {
+	public String getId() {
+		return id;
+	}
+
+	public ConfigDiffType getDiffType() {
         return diffType;
     }
 
