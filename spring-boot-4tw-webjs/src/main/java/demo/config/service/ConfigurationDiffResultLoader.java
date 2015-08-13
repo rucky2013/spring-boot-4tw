@@ -39,7 +39,7 @@ public class ConfigurationDiffResultLoader {
 			Assert.hasText(previousVersion);
 			Assert.hasText(nextVersion);
 			if (versionComparator.compare(previousVersion, nextVersion) >= 0) {
-				throw new VersionMismatchException(previousVersion, nextVersion);
+				throw new VersionMisMatchException(previousVersion, nextVersion);
 			}
 			return diffGenerator.generateDiff(previousVersion, nextVersion);
 		}

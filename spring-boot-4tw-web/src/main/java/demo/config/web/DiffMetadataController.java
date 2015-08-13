@@ -38,7 +38,8 @@ public class DiffMetadataController {
 			@RequestParam(defaultValue = "false") boolean full, Model model) {
 
 		if (diffRequest.isVersionSet()) {
-			ConfigDiffResult result = resultLoader.load(diffRequest.fromVersion, diffRequest.toVersion);
+			ConfigDiffResult result = resultLoader.load(
+					diffRequest.fromVersion, diffRequest.toVersion);
 			ConfigDiff configDiff = converter.convert(result);
 
 			model.addAttribute("previousVersion", diffRequest.fromVersion);
@@ -50,7 +51,7 @@ public class DiffMetadataController {
 		}
 		else {
 			model.addAttribute("previousVersion", "1.3.0.M1");
-			model.addAttribute("nextVersion", "1.3.0.BUILD-SNAPSHOT");
+			model.addAttribute("nextVersion", "1.3.0.M3");
 			model.addAttribute("diffs", null);
 		}
 		return "diff";
