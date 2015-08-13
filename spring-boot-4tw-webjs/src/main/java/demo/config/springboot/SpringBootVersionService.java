@@ -1,43 +1,43 @@
 package demo.config.springboot;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import demo.config.diff.support.AetherDependencyResolver;
+import org.eclipse.aether.repository.RemoteRepository;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class SpringBootVersionService {
 
-	static final String BOOT_VERSION_ENDPOINT = "https://spring.io/project_metadata/spring-boot.json";
+	private final AetherDependencyResolver dependencyResolver;
 
-	private final RestTemplate restTemplate;
-
-	protected SpringBootVersionService(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-	}
+	private final List<String> repositoryUrls;
 
 	public SpringBootVersionService() {
-		this(new RestTemplate());
+		RemoteRepository[] repositories = new RemoteRepository[] {AetherDependencyResolver.SPRING_IO_RELEASE,
+				AetherDependencyResolver.SPRING_IO_MILESTONE};
+		this.dependencyResolver = AetherDependencyResolver.create(false, repositories);
+		this.repositoryUrls = Arrays.asList(repositories).stream()
+				.map(RemoteRepository::getUrl).collect(Collectors.toList());
 	}
 
-	@Cacheable("bootversions")
+	public List<String> getRepositoryUrls() {
+		return this.repositoryUrls;
+	}
+
+
+	@Cacheable("boot-versions")
 	public List<String> fetchBootVersions() {
-		String content = restTemplate.getForObject(BOOT_VERSION_ENDPOINT, String.class);
-		JSONObject json = new JSONObject(content);
-		List<String> versions = new ArrayList<>();
-		if (json.has("projectReleases")) {
-			JSONArray projectReleases = json.getJSONArray("projectReleases");
-			for (int i = 0; i < projectReleases.length(); i++) {
-				JSONObject projectRelease = projectReleases.getJSONObject(i);
-				if (projectRelease.has("version")) {
-					versions.add(projectRelease.getString("version"));
-				}
-			}
+		try {
+			return dependencyResolver.resolveAvailableVersions("org.springframework.boot", "spring-boot");
 		}
-		return versions;
+		catch (IOException e) {
+			throw new IllegalStateException("Failed to fetch Spring Boot versions", e);
+		}
 	}
 }

@@ -5,7 +5,10 @@ import javax.cache.configuration.MutableConfiguration;
 import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
 
+import demo.config.springboot.SpringBootVersionService;
+
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,23 +27,28 @@ public class Application {
 	}
 
 	@Bean
-	public HealthIndicator springIoHealthIndicator() {
-		return () -> {
-			ResponseEntity<Object> entity = new RestTemplate()
-					.getForEntity("https://spring.io/project_metadata/spring-boot.json", Object.class);
-			return Health.up().withDetail("httpStatus", entity.getStatusCode()).build();
+	public HealthIndicator releaseRepositoryHealthIndicator(SpringBootVersionService springBootVersionService) {
+		return new AbstractHealthIndicator() {
+			@Override
+			protected void doHealthCheck(Health.Builder builder) throws Exception {
+				RestTemplate restTemplate = new RestTemplate();
+				for (String url : springBootVersionService.getRepositoryUrls()) {
+					ResponseEntity<String> entity = restTemplate
+							.getForEntity(url, String.class);
+					builder.up().withDetail(url, entity.getStatusCode());
+				}
+			}
 		};
 	}
 
 	@Bean
 	public JCacheManagerCustomizer cacheManagerCustomizer() {
 		return cacheManager -> {
-			MutableConfiguration<?, ?> config = new MutableConfiguration<>();
-			config.setExpiryPolicyFactory(CreatedExpiryPolicy
-					.factoryOf(Duration.ONE_HOUR));
-			config.setStatisticsEnabled(true);
-			cacheManager.createCache("diffs", config);
-			cacheManager.createCache("bootversions", config);
+			cacheManager.createCache("diffs", new MutableConfiguration<>()
+					.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(Duration.ONE_HOUR))
+					.setStatisticsEnabled(true));
+			cacheManager.createCache("boot-versions", new MutableConfiguration<>()
+					.setStatisticsEnabled(true));
 
 		};
 	}

@@ -17,8 +17,18 @@
 package demo.config.diff.support;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -45,6 +55,11 @@ import org.eclipse.aether.spi.locator.ServiceLocator;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.repository.SimpleArtifactDescriptorPolicy;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * @author Andy Wilkinson
@@ -75,9 +90,13 @@ public class AetherDependencyResolver {
 	}
 
 	public static AetherDependencyResolver withAllRepositories(boolean useLocalRepo) {
-		File localMavenRepository = useLocalRepo ? getM2RepoDirectory() : getTempM2RepoDirectory();
-		return new AetherDependencyResolver(localMavenRepository, SPRING_IO_RELEASE,
+		return create(useLocalRepo, SPRING_IO_RELEASE,
 				SPRING_IO_MILESTONE, SPRING_IO_SNAPSHOT);
+	}
+
+	public static AetherDependencyResolver create(boolean useLocalRepo, RemoteRepository... repositories) {
+		File localMavenRepository = useLocalRepo ? getM2RepoDirectory() : getTempM2RepoDirectory();
+		return new AetherDependencyResolver(localMavenRepository, repositories);
 	}
 
 	public ArtifactResult resolveDependency(String dependency) throws ArtifactResolutionException {
@@ -90,6 +109,45 @@ public class AetherDependencyResolver {
 	public VersionResult resolveVersion(String dependency) throws VersionResolutionException {
 		VersionRequest versionRequest = new VersionRequest(new DefaultArtifact(dependency), this.repositories, null);
 		return this.repositorySystem.resolveVersion(session, versionRequest);
+	}
+
+	public List<String> resolveAvailableVersions(String groupId, String artifactId) throws IOException {
+		String group = groupId.replace('.', '/');
+		Set<String> result = new LinkedHashSet<>();
+		for (RemoteRepository repository : repositories) {
+			URL url = new URL(repository.getUrl() + "/" + group + "/" + artifactId + "/maven-metadata.xml");
+			HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+			int responseCode = httpConn.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+				try (InputStream in = httpConn.getInputStream()) {
+					result.addAll(parse(in));
+				}
+			}
+		}
+		return result.stream().sorted(String::compareTo).collect(Collectors.toList());
+	}
+
+	private Set<String> parse(InputStream in) throws IOException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(in);
+			Element versioning = (Element) doc.getElementsByTagName("versioning").item(0);
+			Element version = (Element) versioning.getElementsByTagName("versions").item(0);
+			NodeList versions = version.getElementsByTagName("version");
+			Set<String> content = new LinkedHashSet<>();
+			for (int temp = 0; temp < versions.getLength(); temp++) {
+				Node versionEl = versions.item(temp);
+				content.add(versionEl.getTextContent().trim());
+			}
+			return content;
+		}
+		catch (ParserConfigurationException e) {
+			throw new IllegalStateException(e);
+		}
+		catch (SAXException e) {
+			throw new IllegalStateException("Invalid document", e);
+		}
 	}
 
 	private static RepositorySystem createRepositorySystem(ServiceLocator serviceLocator) {
