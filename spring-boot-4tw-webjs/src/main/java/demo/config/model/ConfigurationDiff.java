@@ -3,10 +3,6 @@ package demo.config.model;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- *
- * @author Stephane Nicoll
- */
 public class ConfigurationDiff {
 
 	private String leftVersion;

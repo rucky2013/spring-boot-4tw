@@ -19,9 +19,9 @@
 
 	<modules>
 		<module>spring-boot-4tw-config-diff</module>
-        <module>spring-boot-4tw-client</module>
+		<module>spring-boot-4tw-client</module>
 		<module>spring-boot-4tw-web</module>
-        <module>spring-boot-4tw-webjs</module>
+		<module>spring-boot-4tw-webjs</module>
 	</modules>
 
 
@@ -39,11 +39,11 @@
 				<artifactId>spring-boot-4tw-config-diff</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
-            <dependency>
-                <groupId>org.test.springone</groupId>
-                <artifactId>spring-boot-4tw-client</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
+			<dependency>
+				<groupId>org.test.springone</groupId>
+				<artifactId>spring-boot-4tw-client</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.webjars</groupId>

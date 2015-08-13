@@ -19,10 +19,6 @@ import static org.mockito.BDDMockito.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 
-/**
- *
- * @author Stephane Nicoll
- */
 public class ConfigDiffResultTestLoader {
 
 	public static ConfigDiffResult generateDiff(String left, String right) throws IOException {

@@ -8,11 +8,6 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-/**
- * The annotated element must not be a valid version.
- *
- * @author Stephane Nicoll
- */
 @Documented
 @Constraint(validatedBy = VersionValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})

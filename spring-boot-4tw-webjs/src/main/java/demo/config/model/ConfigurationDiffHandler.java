@@ -1,17 +1,20 @@
 package demo.config.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import demo.config.diff.ConfigDiffResult;
 import demo.config.diff.ConfigDiffType;
 import demo.config.diff.ConfigGroupDiff;
 import demo.config.diff.ConfigPropertyDiff;
+
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepository;
 
-import java.util.*;
-
-/**
- *
- * @author Stephane Nicoll
- */
 public class ConfigurationDiffHandler {
 
 	private static final Comparator<ConfigGroupDiff> GROUP_COMPARATOR = new GroupComparator();

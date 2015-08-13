@@ -1,6 +1,5 @@
 package demo.config;
 
-
 import javax.cache.configuration.MutableConfiguration;
 import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
@@ -27,6 +26,18 @@ public class Application {
 	}
 
 	@Bean
+	public JCacheManagerCustomizer cacheManagerCustomizer() {
+		return cm -> {
+			cm.createCache("diffs", new MutableConfiguration<>()
+					.setExpiryPolicyFactory(CreatedExpiryPolicy
+							.factoryOf(Duration.ONE_HOUR))
+					.setStatisticsEnabled(true));
+			cm.createCache("boot-versions", new MutableConfiguration<>()
+					.setStatisticsEnabled(true));
+		};
+	}
+
+	@Bean
 	public HealthIndicator releaseRepositoryHealthIndicator(SpringBootVersionService springBootVersionService) {
 		return new AbstractHealthIndicator() {
 			@Override
@@ -38,18 +49,6 @@ public class Application {
 					builder.up().withDetail(url, entity.getStatusCode());
 				}
 			}
-		};
-	}
-
-	@Bean
-	public JCacheManagerCustomizer cacheManagerCustomizer() {
-		return cacheManager -> {
-			cacheManager.createCache("diffs", new MutableConfiguration<>()
-					.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(Duration.ONE_HOUR))
-					.setStatisticsEnabled(true));
-			cacheManager.createCache("boot-versions", new MutableConfiguration<>()
-					.setStatisticsEnabled(true));
-
 		};
 	}
 

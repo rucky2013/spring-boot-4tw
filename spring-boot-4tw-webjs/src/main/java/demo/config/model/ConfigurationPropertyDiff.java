@@ -1,12 +1,9 @@
 package demo.config.model;
 
 import demo.config.diff.ConfigDiffType;
+
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
 
-/**
- *
- * @author Stephane Nicoll
- */
 public class ConfigurationPropertyDiff {
 
 	private String id;

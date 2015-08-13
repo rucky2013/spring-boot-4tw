@@ -1,14 +1,10 @@
 package demo.config.model;
 
-import demo.config.diff.ConfigDiffType;
-
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- *
- * @author Stephane Nicoll
- */
+import demo.config.diff.ConfigDiffType;
+
 public class ConfigurationGroupDiff {
 
 	private String id;

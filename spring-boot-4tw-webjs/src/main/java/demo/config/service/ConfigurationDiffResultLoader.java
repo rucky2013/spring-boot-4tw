@@ -1,19 +1,15 @@
 package demo.config.service;
 
+import java.io.IOException;
+
 import demo.config.diff.ConfigDiffGenerator;
 import demo.config.diff.ConfigDiffResult;
 import demo.config.diff.support.AetherDependencyResolver;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
-
-/**
- * Loads a diff between two Spring Boot versions.
- *
- * @author Stephane Nicoll
- */
 @Service
 public class ConfigurationDiffResultLoader {
 
