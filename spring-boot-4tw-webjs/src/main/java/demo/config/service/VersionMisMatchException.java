@@ -1,8 +1,12 @@
 package demo.config.service;
 
-public class VersionMismatchException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-	public VersionMismatchException(String previousVersion, String nextVersion) {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class VersionMisMatchException extends RuntimeException {
+
+	public VersionMisMatchException(String previousVersion, String nextVersion) {
 		super(previousVersion + " is not prior to " + nextVersion);
 	}
 }
