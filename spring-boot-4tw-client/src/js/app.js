@@ -6,7 +6,7 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
     .factory('jQuery', ['$window', function ($window) {
         return $window.jQuery;
     }])
-    .value('springBootVersionURL', '/springboot/versions.json')
+    .value('springBootVersionURL', 'http://localhost:9090/springboot/versions.json')
 
     .config(function ($routeProvider) {
         $routeProvider
