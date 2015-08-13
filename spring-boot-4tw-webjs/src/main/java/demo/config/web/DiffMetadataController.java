@@ -73,7 +73,6 @@ public class DiffMetadataController {
 		return "\"" + diff.getLeftVersion() + "#" + diff.getRightVersion() + "\"";
 	}
 
-
 	static class DiffRequest {
 
 		@Version
