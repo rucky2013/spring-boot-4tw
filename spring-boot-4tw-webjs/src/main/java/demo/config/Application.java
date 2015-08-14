@@ -28,12 +28,12 @@ public class Application {
 	@Bean
 	public JCacheManagerCustomizer cacheManagerCustomizer() {
 		return cm -> {
-			cm.createCache("diffs", new MutableConfiguration<>()
+			MutableConfiguration<Object, Object> configuration = new MutableConfiguration<>()
 					.setExpiryPolicyFactory(CreatedExpiryPolicy
 							.factoryOf(Duration.ONE_HOUR))
-					.setStatisticsEnabled(true));
-			cm.createCache("boot-versions", new MutableConfiguration<>()
-					.setStatisticsEnabled(true));
+					.setStatisticsEnabled(true);
+			cm.createCache("diffs", configuration);
+			cm.createCache("boot-versions", configuration);
 		};
 	}
 
