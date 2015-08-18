@@ -7,12 +7,16 @@ import java.util.stream.Collectors;
 
 import demo.config.diff.support.AetherDependencyResolver;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SpringBootVersionService {
+
+	private static final Logger logger = LoggerFactory.getLogger(SpringBootVersionService.class);
 
 	private final AetherDependencyResolver dependencyResolver;
 
@@ -34,6 +38,7 @@ public class SpringBootVersionService {
 	@Cacheable("boot-versions")
 	public List<String> fetchBootVersions() {
 		try {
+			logger.info("Fetching Spring Boot versions from {}", repositoryUrls);
 			return dependencyResolver.resolveAvailableVersions("org.springframework.boot", "spring-boot");
 		}
 		catch (IOException e) {
