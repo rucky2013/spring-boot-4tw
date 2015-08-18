@@ -1,12 +1,15 @@
 package demo.config.web;
 
+import java.util.List;
+import javax.validation.Valid;
+
 import demo.config.diff.ConfigDiffResult;
-import demo.config.diff.support.UnknownSpringBootVersion;
 import demo.config.model.ConfigurationDiff;
 import demo.config.model.ConfigurationDiffHandler;
 import demo.config.service.ConfigurationDiffResultLoader;
 import demo.config.springboot.SpringBootVersionService;
 import demo.config.validation.Version;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,9 +17,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 public class DiffMetadataController {
@@ -29,7 +29,7 @@ public class DiffMetadataController {
 
 	@Autowired
 	public DiffMetadataController(ConfigurationDiffResultLoader resultLoader,
-	                              SpringBootVersionService bootVersionService) {
+			SpringBootVersionService bootVersionService) {
 		this.resultLoader = resultLoader;
 		this.bootVersionService = bootVersionService;
 		this.handler = new ConfigurationDiffHandler();
@@ -38,8 +38,7 @@ public class DiffMetadataController {
 	@RequestMapping("/diff/{fromVersion}/{toVersion}/")
 	public ResponseEntity<ConfigurationDiff> diffMetadata(
 			@Valid @ModelAttribute DiffRequest diffRequest) throws BindException {
-
-		ConfigDiffResult result = loadDiff(diffRequest);
+		ConfigDiffResult result = resultLoader.load(diffRequest.fromVersion, diffRequest.toVersion);
 		ConfigurationDiff configurationDiff = handler.handle(result);
 
 		return ResponseEntity.ok().eTag(createDiffETag(configurationDiff)).body(configurationDiff);
@@ -49,23 +48,6 @@ public class DiffMetadataController {
 	@ResponseBody
 	public List<String> fetchBootVersions() {
 		return bootVersionService.fetchBootVersions();
-	}
-
-	private ConfigDiffResult loadDiff(DiffRequest diffRequest) throws BindException {
-		try {
-			return resultLoader.load(diffRequest.fromVersion, diffRequest.toVersion);
-		}
-		catch (UnknownSpringBootVersion ex) {
-			BindException bindException = new BindException(diffRequest, "diffRequest");
-			String invalidVersion = ex.getVersion();
-			if (invalidVersion.equals(diffRequest.fromVersion)) {
-				bindException.rejectValue("fromVersion", "{Version.unknown}");
-			}
-			else {
-				bindException.rejectValue("toVersion", "{Version.unknown}");
-			}
-			throw bindException;
-		}
 	}
 
 	private String createDiffETag(ConfigurationDiff diff) {
