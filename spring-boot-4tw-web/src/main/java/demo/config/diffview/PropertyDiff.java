@@ -18,15 +18,6 @@ public class PropertyDiff {
 		this.diffType = diffType;
 		this.previous = previous != null ? previous : EMPTY_PROPERTY;
 		this.next = next != null ? next : EMPTY_PROPERTY;
-		switch (diffType.toString()) {
-			case "ADD":
-				this.cssClass = "success";
-				break;
-			case "DELETE":
-				this.cssClass = "danger";
-				break;
-			default:
-				this.cssClass = "";
-		}
+		this.cssClass = diffType.toString().toLowerCase();
 	}
 }

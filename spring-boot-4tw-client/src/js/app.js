@@ -94,14 +94,4 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
         return function (input) {
             return input ? input.replace(/\./g, "-") : "";
         };
-    })
-    .filter('cssDiffClass', function () {
-        return function (property) {
-            switch (property.diffType) {
-                case "ADD":
-                    return "success";
-                case "DELETE":
-                    return "danger";
-            }
-        };
     });
