@@ -1,18 +1,21 @@
 package demo.config.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import demo.config.diff.ConfigDiffType;
-
-import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
 
 public class ConfigurationPropertyDiff {
 
+	@JsonView(DiffView.Summary.class)
 	private String id;
 
+	@JsonView(DiffView.Summary.class)
 	private ConfigDiffType diffType;
 
-	private ConfigurationMetadataProperty left;
+	@JsonView(DiffView.Summary.class)
+	private ConfigurationMetadata from;
 
-	private ConfigurationMetadataProperty right;
+	@JsonView(DiffView.Summary.class)
+	private ConfigurationMetadata to;
 
 	public String getId() {
 		return id;
@@ -30,20 +33,20 @@ public class ConfigurationPropertyDiff {
 		this.diffType = diffType;
 	}
 
-	public ConfigurationMetadataProperty getLeft() {
-		return left;
+	public ConfigurationMetadata getFrom() {
+		return from;
 	}
 
-	public void setLeft(ConfigurationMetadataProperty left) {
-		this.left = left;
+	public void setFrom(ConfigurationMetadata from) {
+		this.from = from;
 	}
 
-	public ConfigurationMetadataProperty getRight() {
-		return right;
+	public ConfigurationMetadata getTo() {
+		return to;
 	}
 
-	public void setRight(ConfigurationMetadataProperty right) {
-		this.right = right;
+	public void setTo(ConfigurationMetadata to) {
+		this.to = to;
 	}
 
 }

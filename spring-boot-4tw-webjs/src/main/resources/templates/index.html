@@ -68,16 +68,16 @@
                 <tbody>
                 <tr ng-repeat="prop in group.properties" class="{{prop.diffType | lowercase}}">
                     <td>
-                            <span ng-if="prop.left.deprecated" class="deprecated"
-                                  title="{{prop.right.deprecation.reason}} See: {{prop.right.deprecation.replacement}}">{{prop.left.name}}</span>
-                            <span ng-if="!prop.left.deprecation"
-                                  title="{{prop.left.description}}">{{prop.left.name}}</span>
+                            <span ng-if="prop.from.deprecated" class="deprecated"
+                                  title="{{prop.to.deprecationReason}} See: {{prop.to.deprecationReplacement}}">{{prop.from.name}}</span>
+                            <span ng-if="!prop.from.deprecated"
+                                  title="{{prop.from.description}}">{{prop.from.name}}</span>
                     </td>
                     <td>
-                            <span ng-if="prop.right.deprecated" class="deprecated"
-                                  title="{{prop.right.deprecation.reason}} See: {{prop.right.deprecation.replacement}}">{{prop.right.name}}</span>
-                            <span ng-if="!prop.right.deprecated"
-                                  title="{{prop.right.description}}">{{prop.right.name}}</span>
+                            <span ng-if="prop.to.deprecated" class="deprecated"
+                                  title="{{prop.to.deprecationReason}} See: {{prop.to.deprecationReplacement}}">{{prop.to.name}}</span>
+                            <span ng-if="!prop.to.deprecated"
+                                  title="{{prop.to.description}}">{{prop.to.name}}</span>
                     </td>
                 </tr>
                 </tbody>

@@ -1,4 +1,4 @@
-package demo.config.model;
+package demo.config.model.support;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +13,11 @@ import demo.config.diff.ConfigDiffType;
 import demo.config.diff.ConfigGroupDiff;
 import demo.config.diff.ConfigPropertyDiff;
 
+import demo.config.model.ConfigurationDiff;
+import demo.config.model.ConfigurationGroupDiff;
+import demo.config.model.ConfigurationMetadata;
+import demo.config.model.ConfigurationPropertyDiff;
+import org.springframework.boot.configurationmetadata.ConfigurationMetadataProperty;
 import org.springframework.boot.configurationmetadata.ConfigurationMetadataRepository;
 
 public class ConfigurationDiffHandler {
@@ -23,8 +28,8 @@ public class ConfigurationDiffHandler {
 
 	public ConfigurationDiff handle(ConfigDiffResult original) {
 		ConfigurationDiff diff = new ConfigurationDiff();
-		diff.setLeftVersion(original.getLeftVersion());
-		diff.setRightVersion(original.getRightVersion());
+		diff.setFromVersion(original.getLeftVersion());
+		diff.setToVersion(original.getRightVersion());
 		Map<String,ConfigDiffType> groupIdToDiffType = mapGroupIdToDiffType(original);
 		Collection<ConfigGroupDiff> allGroups = sortGroups(original.getAllGroups());
 		for (ConfigGroupDiff originalGroup : allGroups) {
@@ -41,8 +46,8 @@ public class ConfigurationDiffHandler {
 					ConfigurationPropertyDiff propertyDiff = new ConfigurationPropertyDiff();
 					propertyDiff.setId(propertyId);
 					propertyDiff.setDiffType(propertyIdToDiffType.get(propertyId));
-					propertyDiff.setLeft(originalProperty.getLeft());
-					propertyDiff.setRight(originalProperty.getRight());
+					propertyDiff.setFrom(convertConfigMetadata(originalProperty.getLeft()));
+					propertyDiff.setTo(convertConfigMetadata(originalProperty.getRight()));
 					groupDiff.getProperties().add(propertyDiff);
 				}
 
@@ -81,6 +86,26 @@ public class ConfigurationDiffHandler {
 				new ArrayList<ConfigPropertyDiff>(properties);
 		Collections.sort(result, PROPERTY_COMPARATOR);
 		return result;
+	}
+
+	private ConfigurationMetadata convertConfigMetadata(ConfigurationMetadataProperty source) {
+		ConfigurationMetadata destination = new ConfigurationMetadata();
+		if(source != null) {
+			destination.setDefaultValue(source.getDefaultValue());
+			destination.setId(source.getId());
+			destination.setName(source.getName());
+			destination.setType(source.getType());
+			destination.setDescription(source.getDescription());
+			destination.setShortDescription(source.getShortDescription());
+			destination.setDeprecated(source.isDeprecated());
+			if(source.getDeprecation() != null) {
+				destination.setDeprecationReason(source.getDeprecation().getReason());
+				destination.setDeprecationReplacement(source.getDeprecation().getReplacement());
+			}
+			destination.getValueHints().addAll(source.getValueHints());
+			destination.getValueProviders().addAll(source.getValueProviders());
+		}
+		return destination;
 	}
 
 	private static class GroupComparator implements Comparator<ConfigGroupDiff> {

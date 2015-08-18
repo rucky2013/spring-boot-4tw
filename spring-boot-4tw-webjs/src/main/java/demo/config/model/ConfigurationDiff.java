@@ -1,30 +1,35 @@
 package demo.config.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class ConfigurationDiff {
 
-	private String leftVersion;
+	@JsonView(DiffView.Summary.class)
+	private String fromVersion;
 
-	private String rightVersion;
+	@JsonView(DiffView.Summary.class)
+	private String toVersion;
 
+	@JsonView(DiffView.Summary.class)
 	private final List<ConfigurationGroupDiff> groups = new LinkedList<>();
 
-	public String getLeftVersion() {
-		return leftVersion;
+	public String getFromVersion() {
+		return fromVersion;
 	}
 
-	public void setLeftVersion(String leftVersion) {
-		this.leftVersion = leftVersion;
+	public void setFromVersion(String fromVersion) {
+		this.fromVersion = fromVersion;
 	}
 
-	public String getRightVersion() {
-		return rightVersion;
+	public String getToVersion() {
+		return toVersion;
 	}
 
-	public void setRightVersion(String rightVersion) {
-		this.rightVersion = rightVersion;
+	public void setToVersion(String toVersion) {
+		this.toVersion = toVersion;
 	}
 
 	public List<ConfigurationGroupDiff> getGroups() {
