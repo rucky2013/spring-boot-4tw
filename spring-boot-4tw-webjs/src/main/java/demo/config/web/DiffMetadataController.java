@@ -23,9 +23,9 @@ public class DiffMetadataController {
 
 	private final ConfigurationDiffResultLoader resultLoader;
 
-	private final ConfigurationDiffHandler handler;
-
 	private final SpringBootVersionService bootVersionService;
+
+	private final ConfigurationDiffHandler handler;
 
 	@Autowired
 	public DiffMetadataController(ConfigurationDiffResultLoader resultLoader,
