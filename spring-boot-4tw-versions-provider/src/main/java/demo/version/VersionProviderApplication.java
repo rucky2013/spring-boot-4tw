@@ -1,10 +1,15 @@
 package demo.version;
 
+import javax.cache.configuration.MutableConfiguration;
+import javax.cache.expiry.CreatedExpiryPolicy;
+import javax.cache.expiry.Duration;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,16 @@ public class VersionProviderApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(VersionProviderApplication.class, args);
+	}
+
+	@Bean
+	public JCacheManagerCustomizer cacheManagerCustomizer() {
+		return cm -> {
+			cm.createCache("boot-versions", new MutableConfiguration<>()
+					.setExpiryPolicyFactory(CreatedExpiryPolicy
+							.factoryOf(Duration.ONE_HOUR))
+					.setStatisticsEnabled(true));
+		};
 	}
 
 	@Bean
