@@ -34,8 +34,7 @@ public class DiffMetadataController {
 	}
 
 	@RequestMapping("/")
-	public String diffMetadata(@Valid @ModelAttribute DiffRequest diffRequest,
-			@RequestParam(defaultValue = "false") boolean full, Model model) {
+	public String diffMetadata(@Valid @ModelAttribute DiffRequest diffRequest, Model model) {
 
 		if (diffRequest.isVersionSet()) {
 			ConfigDiffResult result = resultLoader.load(
@@ -44,9 +43,10 @@ public class DiffMetadataController {
 
 			model.addAttribute("previousVersion", diffRequest.fromVersion);
 			model.addAttribute("nextVersion", diffRequest.toVersion);
-			model.addAttribute("full", full);
+			model.addAttribute("full", diffRequest.full);
 			List<GroupDiff> groups = configDiff.getGroups().stream()
-					.filter(g -> full || g.getDiffType() != ConfigDiffType.EQUALS).collect(Collectors.toList());
+					.filter(g -> diffRequest.full || g.getDiffType() != ConfigDiffType.EQUALS)
+					.collect(Collectors.toList());
 			model.addAttribute("diffs", groups);
 		}
 		else {
@@ -57,6 +57,7 @@ public class DiffMetadataController {
 		return "diff";
 	}
 
+
 	static class DiffRequest {
 
 		@Version
@@ -64,6 +65,8 @@ public class DiffMetadataController {
 
 		@Version
 		private String toVersion;
+
+		private boolean full;
 
 		public boolean isVersionSet() {
 			return this.fromVersion != null || this.toVersion != null;
@@ -83,6 +86,14 @@ public class DiffMetadataController {
 
 		public void setToVersion(String toVersion) {
 			this.toVersion = toVersion;
+		}
+
+		public boolean isFull() {
+			return full;
+		}
+
+		public void setFull(boolean full) {
+			this.full = full;
 		}
 	}
 
