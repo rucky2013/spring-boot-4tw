@@ -32,6 +32,7 @@ public class Application {
 			cm.createCache("diffs", new MutableConfiguration<>()
 					.setExpiryPolicyFactory(CreatedExpiryPolicy
 							.factoryOf(Duration.ONE_HOUR))
+					.setStoreByValue(false)
 					.setStatisticsEnabled(true));
 		};
 	}
