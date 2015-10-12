@@ -11,6 +11,7 @@ import demo.config.springboot.SpringBootVersionService;
 import demo.config.validation.Version;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
@@ -25,13 +26,16 @@ public class DiffMetadataController {
 
 	private final SpringBootVersionService bootVersionService;
 
+	private final CounterService counterService;
+
 	private final ConfigurationDiffHandler handler;
 
 	@Autowired
 	public DiffMetadataController(ConfigurationDiffResultLoader resultLoader,
-			SpringBootVersionService bootVersionService) {
+			SpringBootVersionService bootVersionService, CounterService counterService) {
 		this.resultLoader = resultLoader;
 		this.bootVersionService = bootVersionService;
+		this.counterService = counterService;
 		this.handler = new ConfigurationDiffHandler();
 	}
 
@@ -40,6 +44,8 @@ public class DiffMetadataController {
 			@Valid @ModelAttribute DiffRequest diffRequest) throws BindException {
 		ConfigDiffResult result = resultLoader.load(diffRequest.fromVersion, diffRequest.toVersion);
 		ConfigurationDiff configurationDiff = handler.handle(result);
+
+		logMetrics(diffRequest);
 
 		return ResponseEntity.ok().eTag(createDiffETag(configurationDiff)).body(configurationDiff);
 	}
@@ -52,6 +58,11 @@ public class DiffMetadataController {
 
 	private String createDiffETag(ConfigurationDiff diff) {
 		return "\"" + diff.getLeftVersion() + "#" + diff.getRightVersion() + "\"";
+	}
+
+	private void logMetrics(DiffRequest diffRequest) {
+		this.counterService.increment("diff.from." + diffRequest.getFromVersion());
+		this.counterService.increment("diff.to." + diffRequest.getToVersion());
 	}
 
 	static class DiffRequest {
