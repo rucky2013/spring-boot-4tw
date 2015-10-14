@@ -1,14 +1,14 @@
 angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
 
-    .config(function ($locationProvider) {
+    .config(['$locationProvider', function ($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');
-    })
+    }])
     .factory('jQuery', ['$window', function ($window) {
         return $window.jQuery;
     }])
     .value('springBootVersionURL', 'http://boot-versions-provider.cfapps.io/springboot/versions.json')
 
-    .config(function ($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
             .when('/', {
                 controller: 'FormController as form',
@@ -18,7 +18,7 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
                 controller: 'DiffController as diff',
                 templateUrl: 'diffListTemplate'
             });
-    })
+    }])
     .service('ConfigDiff', ['$http', 'springBootVersionURL', '$q', '$timeout',
         function ($http, springBootVersionURL, $q, $timeout) {
             var fetchDiff = function (fromVersion, toVersion) {

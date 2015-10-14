@@ -14,7 +14,7 @@
     <build>
 		<resources>
 			<resource>
-				<directory>${basedir}/src</directory>
+				<directory>${basedir}/dist</directory>
 			</resource>
             <resource>
                 <directory>${basedir}/node_modules</directory>
@@ -31,14 +31,20 @@
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v0.12.7</nodeVersion>
-                            <npmVersion>2.11.3</npmVersion>
+                            <nodeVersion>v4.2.1</nodeVersion>
+                            <npmVersion>2.14.7</npmVersion>
                         </configuration>
                     </execution>
                     <execution>
                         <id>npm install</id>
                         <goals>
                             <goal>npm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>gulp build</id>
+                        <goals>
+                            <goal>gulp</goal>
                         </goals>
                     </execution>
                 </executions>
