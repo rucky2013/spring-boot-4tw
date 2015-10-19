@@ -6,7 +6,10 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
     .factory('jQuery', ['$window', function ($window) {
         return $window.jQuery;
     }])
-    .value('springBootVersionURL', 'http://boot-versions-provider.cfapps.io/springboot/versions.json')
+    .constant('springBootVersionURL', 'http://boot-versions-provider.cfapps.io/springboot/versions.json')
+    .config(['$provide', function ($provide) {
+        $provide.value("apiRoot", $("head > base").attr("href"));
+    }])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
@@ -19,12 +22,12 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
                 templateUrl: 'diffListTemplate'
             });
     }])
-    .service('ConfigDiff', ['$http', 'springBootVersionURL', '$q', '$timeout',
-        function ($http, springBootVersionURL, $q, $timeout) {
+    .service('ConfigDiff', ['$http', 'apiRoot', 'springBootVersionURL', '$q', '$timeout',
+        function ($http, apiRoot, springBootVersionURL, $q, $timeout) {
             var fetchDiff = function (fromVersion, toVersion) {
 
                 var deferred = $q.defer();
-                $http.get("/diff/" + fromVersion + "/" + toVersion + "/")
+                $http.get(apiRoot + "diff/" + fromVersion + "/" + toVersion + "/")
                     .success(function (data) {
                         deferred.resolve(data);
                     })
@@ -41,7 +44,7 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
             return {
                 fetchDiff: fetchDiff,
                 fetchBootVersions: fetchBootVersions
-            }
+            };
         }])
     .controller('FormController', ['$scope', '$location', 'jQuery', 'ConfigDiff',
         function ($scope, $location, $, ConfigDiff) {
@@ -51,7 +54,7 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
                 });
             $scope.compare = function (fromVersion, toVersion) {
                 $location.url("/compare/" + fromVersion + "/" + toVersion + "/");
-            }
+            };
         }])
     .controller('DiffController', ['$scope', '$routeParams', 'ConfigDiff', '$location', '$anchorScroll', 'jQuery',
         function ($scope, $routeParams, ConfigDiff, $location, $anchorScroll, $) {
@@ -64,30 +67,30 @@ angular.module('diffApp', ['ngRoute', 'ui.bootstrap'])
 
             ConfigDiff.fetchDiff(fromVersion, toVersion)
                 .then(function (data) {
-                    $scope.diffs = {
-                        groups: data.groups,
-                        fromVersion: fromVersion,
-                        toVersion: toVersion
-                    };
-                    $scope.loading = false;
-                },
-                function (error) {
-                    $scope.exception = error;
-                    $scope.loading = false;
-                });
+                        $scope.diffs = {
+                            groups: data.groups,
+                            fromVersion: fromVersion,
+                            toVersion: toVersion
+                        };
+                        $scope.loading = false;
+                    },
+                    function (error) {
+                        $scope.exception = error;
+                        $scope.loading = false;
+                    });
             $scope.bootVersions = ConfigDiff.fetchBootVersions()
                 .then(function (result) {
                     $scope.bootVersions = result.data;
                 });
             $scope.compare = function (fromVersion, toVersion) {
                 $location.url("/compare/" + fromVersion + "/" + toVersion + "/");
-            }
+            };
             $scope.fromVersion = fromVersion;
             $scope.toVersion = toVersion;
             $scope.gotoAnchor = function (e, group) {
                 $anchorScroll(group.id.replace(/\./g, "-"));
                 e.preventDefault();
-            }
+            };
         }])
 
     .filter('anchor', function () {
