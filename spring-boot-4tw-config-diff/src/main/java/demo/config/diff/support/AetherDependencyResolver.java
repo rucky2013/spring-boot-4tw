@@ -82,19 +82,19 @@ public class AetherDependencyResolver {
 
 	private final List<RemoteRepository> repositories;
 
-	public AetherDependencyResolver(File localMavenRepository, RemoteRepository... remoteRepositories) {
+	public AetherDependencyResolver(File localMavenRepository, List<RemoteRepository> remoteRepositories) {
 		ServiceLocator serviceLocator = createServiceLocator();
 		this.repositorySystem = createRepositorySystem(serviceLocator);
 		this.session = createRepositorySystemSession(localMavenRepository, this.repositorySystem);
-		this.repositories = Arrays.asList(remoteRepositories);
+		this.repositories = remoteRepositories;
 	}
 
 	public static AetherDependencyResolver withAllRepositories(boolean useLocalRepo) {
-		return create(useLocalRepo, SPRING_IO_RELEASE,
-				SPRING_IO_MILESTONE, SPRING_IO_SNAPSHOT);
+		return create(useLocalRepo, Arrays.asList(SPRING_IO_RELEASE,
+				SPRING_IO_MILESTONE, SPRING_IO_SNAPSHOT));
 	}
 
-	public static AetherDependencyResolver create(boolean useLocalRepo, RemoteRepository... repositories) {
+	public static AetherDependencyResolver create(boolean useLocalRepo, List<RemoteRepository> repositories) {
 		File localMavenRepository = useLocalRepo ? getM2RepoDirectory() : getTempM2RepoDirectory();
 		return new AetherDependencyResolver(localMavenRepository, repositories);
 	}

@@ -1,7 +1,6 @@
 package demo.config.springboot;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +9,7 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +22,11 @@ public class SpringBootVersionService {
 
 	private final List<String> repositoryUrls;
 
-	public SpringBootVersionService() {
-		RemoteRepository[] repositories = new RemoteRepository[] {AetherDependencyResolver.SPRING_IO_RELEASE,
-				AetherDependencyResolver.SPRING_IO_MILESTONE};
+	@Autowired
+	public SpringBootVersionService(SpringBootVersionProperties versionProperties) {
+		List<RemoteRepository> repositories = versionProperties.resolveRepositories();
 		this.dependencyResolver = AetherDependencyResolver.create(false, repositories);
-		this.repositoryUrls = Arrays.asList(repositories).stream()
+		this.repositoryUrls = repositories.stream()
 				.map(RemoteRepository::getUrl).collect(Collectors.toList());
 	}
 
