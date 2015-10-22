@@ -17,7 +17,7 @@
 				<directory>${project.build.directory}/dist</directory>
 			</resource>
             <resource>
-                <directory>${basedir}/node_modules</directory>
+                <directory>${basedir}/bower_components</directory>
             </resource>
 		</resources>
 		<plugins>
@@ -42,6 +42,12 @@
                         <id>npm install</id>
                         <goals>
                             <goal>npm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>bower install</id>
+                        <goals>
+                            <goal>bower</goal>
                         </goals>
                     </execution>
                     <execution>
