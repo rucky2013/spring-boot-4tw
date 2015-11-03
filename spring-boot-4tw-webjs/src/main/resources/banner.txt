@@ -19,4 +19,4 @@ ${AnsiColor.BLUE}█████████████████████
 ${AnsiColor.BLUE}████████████████████████${AnsiColor.BRIGHT_BLACK}██${AnsiColor.DEFAULT}████${AnsiColor.BRIGHT_BLACK}██${AnsiColor.BLUE}██${AnsiColor.BRIGHT_BLACK}██${AnsiColor.DEFAULT}████${AnsiColor.BLUE}████████████${AnsiColor.BRIGHT_BLACK}██${AnsiColor.DEFAULT}████${AnsiColor.BRIGHT_BLACK}████${AnsiColor.DEFAULT}████${AnsiColor.BRIGHT_BLACK}██${AnsiColor.BLUE}████████████
 ${AnsiColor.BLUE}████████████████████████${AnsiColor.BRIGHT_BLACK}██████${AnsiColor.BLUE}████${AnsiColor.BRIGHT_BLACK}██████${AnsiColor.BLUE}████████████${AnsiColor.BRIGHT_BLACK}██████${AnsiColor.BLUE}████${AnsiColor.BRIGHT_BLACK}██████${AnsiColor.BLUE}████████████
 ████████████████████████████████████████████████████████████████████████████████
-${AnsiColor.BLACK}:: Meow :: Running Spring Boot ${spring-boot.version} :: \ö/
+${AnsiColor.BRIGHT_RED}:: Meow :: Running Spring Boot ${spring-boot.version} :: \ö/${AnsiColor.WHITE}
